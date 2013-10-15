@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{94A0CBFC-EDAE-45C9-9C80-0F6DDC8DA410}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EmberEngine</RootNamespace>
+    <AssemblyName>EmberEngine</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\WindowsGL\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\WindowsGL\Release\</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="EmberEngine\ThreeD\Camera.cs" />
+    <Compile Include="EmberEngine\ThreeD\CollisionDetection\ICollidable.cs" />
+    <Compile Include="EmberEngine\ThreeD\Instancing\Instance.cs" />
+    <Compile Include="EmberEngine\ThreeD\Instancing\IWorldComponent.cs" />
+    <Compile Include="EmberEngine\ThreeD\Rendering\IRenderable.cs" />
+    <Compile Include="EmberEngine\ThreeD\Rendering\PolyRender.cs" />
+    <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\BasicShader.cs" />
+    <Compile Include="EmberEngine\ThreeD\Tools\FastVertices.cs" />
+    <Compile Include="EmberEngine\ThreeD\Tools\VertexPositionColorNormalTexture.cs" />
+    <Compile Include="EmberEngine\ThreeD\ViewParameters.cs" />
+    <Compile Include="EmberEngine\ThreeD\World.cs" />
+    <Compile Include="EmberEngine\Tools\AdvancedMath\Extensions.cs" />
+    <Compile Include="EmberEngine\Tools\AdvancedMath\Math2.cs" />
+    <Compile Include="EmberEngine\Tools\AdvancedMath\Noise\Erode.cs" />
+    <Compile Include="EmberEngine\Tools\AdvancedMath\Noise\FaultFormation.cs" />
+    <Compile Include="EmberEngine\Tools\FramerateCounter.cs" />
+    <Compile Include="EmberEngine\Tools\Input\KeyManager.cs" />
+    <Compile Include="EmberEngine\Tools\Input\KeyWatcher.cs" />
+    <Compile Include="EmberEngine\Tools\Management\BlockTextureManager.cs" />
+    <Compile Include="EmberEngine\Tools\Management\FontManager.cs" />
+    <Compile Include="EmberEngine\UI\UIElement.cs" />
+    <Compile Include="EmberEngine\UI\UIManager.cs" />
+    <Compile Include="EmberEngine\UI\UISpacer.cs" />
+    <Compile Include="EmberEngine\UI\UIString.cs" />
+    <Compile Include="Game1.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\Sample1\Ball.cs" />
+    <Compile Include="Samples\Sample1\Sample1.cs" />
+    <Compile Include="Samples\Sample1\ThreeDTerrain.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MSBuild\..\MonoGame\v3.0\Assemblies\WindowsGL\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MSBuild\..\MonoGame\v3.0\Assemblies\WindowsGL\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Lidgren.Network">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MSBuild\..\MonoGame\v3.0\Assemblies\WindowsGL\Lidgren.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Sdl">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MSBuild\..\MonoGame\v3.0\Assemblies\WindowsGL\Tao.Sdl.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\atomic_tag.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\foo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Shaders\StandardShader.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Terrain\terrain_0.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Terrain\terrain_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Terrain\terrain_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Content\Font\sf1.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Shaders\StandardShader.mgfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
