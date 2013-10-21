@@ -24,41 +24,33 @@ namespace Samples.Sample1
 
             List<VertexPositionColorNormalTexture> temp = new List<VertexPositionColorNormalTexture>();
 
-            for (int x = 0; x < stepping; x++) //90 circles, difference between each is 4 degrees
+            for (int yaw = 0; yaw < stepping; yaw++) //90 circles, difference between each is 4 degrees
             {
                 float difx = 360.0f / (float)stepping;
-                for (int y = 0; y < stepping; y++) //90 veritces, difference between each is 4 degrees 
+
+                for (int pitch = 0; pitch < stepping; pitch++) //90 veritces, difference between each is 4 degrees 
                 {
                     float dify = 360.0f / (float)stepping;
-                    Matrix zrot = Matrix.CreateRotationZ(MathHelper.ToRadians(y * dify)); //rotate vertex around z
-                    Matrix yrot = Matrix.CreateRotationY(MathHelper.ToRadians(x * difx)); //rotate circle around y
-                    Vector3 point = Vector3.Transform(Vector3.Transform(rad, zrot), yrot);//transformation
 
-                    Matrix zrot2 = Matrix.CreateRotationZ(MathHelper.ToRadians((y + 1) * dify)); //rotate vertex around z
-                    Matrix yrot2 = Matrix.CreateRotationY(MathHelper.ToRadians((x + 1) * difx)); //rotate circle around y
-                    Vector3 point2 = Vector3.Transform(Vector3.Transform(rad, zrot2), yrot2);//transformation
+                    Vector3 point = Math2.GetFromYawPitch(yaw * difx, pitch * dify, radius);
 
-                    Matrix zrot3 = Matrix.CreateRotationZ(MathHelper.ToRadians((y + 1) * dify)); //rotate vertex around z
-                    Matrix yrot3 = Matrix.CreateRotationY(MathHelper.ToRadians(x * difx)); //rotate circle around y
-                    Vector3 point3 = Vector3.Transform(Vector3.Transform(rad, zrot3), yrot3);//transformation
+                    Vector3 point2 = Math2.GetFromYawPitch((yaw + 1) * difx, (pitch) * dify, radius);
+                    
+                    Vector3 point3 = Math2.GetFromYawPitch((yaw) * difx, (pitch + 1) * dify, radius);
 
-                    Matrix zrot4 = Matrix.CreateRotationZ(MathHelper.ToRadians(y * dify)); //rotate vertex around z
-                    Matrix yrot4 = Matrix.CreateRotationY(MathHelper.ToRadians((x + 1) * difx)); //rotate circle around y
-                    Vector3 point4 = Vector3.Transform(Vector3.Transform(rad, zrot4), yrot4);//transformation
+                    Vector3 point4 = Math2.GetFromYawPitch((yaw + 1) * difx, (pitch + 1) * dify, radius);
 
                     Vector3 n1 = Math2.GetFromYawPitch(
-                        (y * dify + (y + 1) * dify) / 2,
-                        (x * difx + (x + 1) * difx) / 2, 1);
+                        ((pitch * dify) + ((pitch + 1) * dify)) / 2.0F,
+                        ((yaw * difx) + ((yaw + 1) * difx)) / 2.0F, 1);
+                    
+                    temp.Add(FV.VPCNT(point, n1, Math2.GetUVForSphere(yaw * difx, pitch * dify, radius), color));
+                    temp.Add(FV.VPCNT(point2, n1, Math2.GetUVForSphere((yaw + 1) * difx, (pitch) * dify, radius), color));
+                    temp.Add(FV.VPCNT(point3, n1, Math2.GetUVForSphere((yaw) * difx, (pitch + 1) * dify, radius), color));
 
-                    float UVMult = (360.0F / texCount);
-
-                    temp.Add(FV.VPCNT(point, n1, x * difx / UVMult, y * dify / UVMult, color));
-                    temp.Add(FV.VPCNT(point2, n1, (x + 1) * difx / UVMult, (y + 1) * dify / UVMult, color));
-                    temp.Add(FV.VPCNT(point3, n1, x * difx / UVMult, (y + 1) * dify / UVMult, color));
-
-                    temp.Add(FV.VPCNT(point, n1, x * difx / UVMult, y * dify / UVMult, color));
-                    temp.Add(FV.VPCNT(point4, n1, (x + 1) * difx / UVMult, (y + 1) * dify / UVMult, color));
-                    temp.Add(FV.VPCNT(point2, n1, (x + 1) * difx / UVMult, y * dify / UVMult, color));
+                    temp.Add(FV.VPCNT(point, n1, Math2.GetUVForSphere(yaw * difx, pitch * dify, radius), color));
+                    temp.Add(FV.VPCNT(point4, n1, Math2.GetUVForSphere((yaw + 1) * difx, (pitch + 1) * dify, radius), color));
+                    temp.Add(FV.VPCNT(point2, n1, Math2.GetUVForSphere((yaw + 1) * difx, (pitch) * dify, radius), color));
                 }
             }
             renderer.AddPolys(temp.ToArray());

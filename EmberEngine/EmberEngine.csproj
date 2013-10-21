@@ -37,11 +37,13 @@
   <ItemGroup>
     <Compile Include="EmberEngine\ThreeD\Camera.cs" />
     <Compile Include="EmberEngine\ThreeD\CollisionDetection\ICollidable.cs" />
+    <Compile Include="EmberEngine\ThreeD\CollisionDetection\RayCollision.cs" />
     <Compile Include="EmberEngine\ThreeD\Instancing\Instance.cs" />
     <Compile Include="EmberEngine\ThreeD\Instancing\IWorldComponent.cs" />
     <Compile Include="EmberEngine\ThreeD\Rendering\IRenderable.cs" />
     <Compile Include="EmberEngine\ThreeD\Rendering\PolyRender.cs" />
     <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\BasicShader.cs" />
+    <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\IShader.cs" />
     <Compile Include="EmberEngine\ThreeD\Tools\FastVertices.cs" />
     <Compile Include="EmberEngine\ThreeD\Tools\VertexPositionColorNormalTexture.cs" />
     <Compile Include="EmberEngine\ThreeD\ViewParameters.cs" />
@@ -59,59 +61,69 @@
     <Compile Include="EmberEngine\UI\UIManager.cs" />
     <Compile Include="EmberEngine\UI\UISpacer.cs" />
     <Compile Include="EmberEngine\UI\UIString.cs" />
-    <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Samples\Sample1\Ball.cs" />
     <Compile Include="Samples\Sample1\Sample1.cs" />
     <Compile Include="Samples\Sample1\ThreeDTerrain.cs" />
+    <Compile Include="Samples\Sample2\Plane.cs" />
+    <Compile Include="Samples\Sample2\SlotsGame.cs" />
+    <Compile Include="Samples\Sample2\Sample2.cs" />
+    <Compile Include="Samples\Sample2\Spinner.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="OpenTK">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MSBuild\..\MonoGame\v3.0\Assemblies\WindowsGL\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MSBuild\..\MonoGame\v3.0\Assemblies\WindowsGL\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Lidgren.Network">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MSBuild\..\MonoGame\v3.0\Assemblies\WindowsGL\Lidgren.Network.dll</HintPath>
-    </Reference>
-    <Reference Include="Tao.Sdl">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MSBuild\..\MonoGame\v3.0\Assemblies\WindowsGL\Tao.Sdl.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\atomic_tag.png">
+    <Content Include="Content\Sample1\Terrain\terrain_0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\foo.png">
+    <Content Include="Content\Sample1\Terrain\terrain_1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Shaders\StandardShader.fx">
+    <Content Include="Content\Sample1\Terrain\terrain_2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Terrain\terrain_0.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Content\Sample2\Textures\grid.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Terrain\terrain_1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Terrain\terrain_2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Content\Sample2\Textures\Spinner.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include="Content\Font\sf1.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\Shaders\StandardShader.mgfx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Common\Font\sf1.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Include="Content\Common\Shaders\BasicShader.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Content\Common\Shaders\StandardShader.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Lidgren.Network, Version=2011.3.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\Lidgren.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="Tao.Sdl, Version=1.2.13.0, Culture=neutral, PublicKeyToken=9c7a200e36c0094e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\Tao.Sdl.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

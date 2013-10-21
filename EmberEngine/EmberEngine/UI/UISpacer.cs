@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EmberEngine.SpineLibrary.UI
+namespace EmberEngine.UI
 {
     /// <summary>
     /// A UI element that renders a string

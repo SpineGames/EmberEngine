@@ -25,7 +25,7 @@ using OpenTK.Input;
 ///  }
 ///</Note>
 
-namespace Samples.Sample1
+namespace Samples.Sample2
 {
     /// <summary>
     /// This is the main type for your game
@@ -34,13 +34,8 @@ namespace Samples.Sample1
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
-        Texture2D tex;
-
+        
         World world;
-
-        ThreeDTerrain terrain;
-        Texture2D terrainHeight;
 
         UIManager UI;
         KeyManager keys;
@@ -51,7 +46,7 @@ namespace Samples.Sample1
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            Window.Title = "Ember Engine Test";
+            Window.Title = "Slots Demo";
 
             PolyRender.Initialize(CullMode.CullCounterClockwiseFace);
         }
@@ -67,8 +62,8 @@ namespace Samples.Sample1
             //GraphicsDevice.RasterizerState.CullMode = CullMode.None;
             keys = new KeyManager();
 
-            keys.AddKeyWatcher(new KeyWatcher(Key.Q));
-            keys.Watchers[0].AddPressed(QPressed);
+            keys.AddKeyWatcher(new KeyWatcher(Key.Enter));
+            keys.Watchers[0].AddPressed(KeyPressed);
 
             base.Initialize();
         }
@@ -79,54 +74,38 @@ namespace Samples.Sample1
         /// </summary>
         protected override void LoadContent()
         {
-            byte[] temp = LoadEffectResource("Content/Common/Shaders/BasicShader.xnb");
-
-            byte _Version = temp[4];
-            Effect e = Content.Load<Effect>("Common/Shaders/StandardShader");
-
             BasicShader effect = new BasicShader(new BasicEffect(GraphicsDevice));
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            tex = Content.Load<Texture2D>("Sample1/Terrain/terrain_2");
-            Texture2D tex2 = Content.Load<Texture2D>("Sample1/Terrain/terrain_0");
+            Texture2D spinner = Content.Load<Texture2D>("Sample2/Textures/Spinner");
+            Texture2D grid = Content.Load<Texture2D>("Sample2/Textures/grid");
             FontManager.LoadFont(Content, "Common/Font/sf1");
             
-            effect.Texture = tex;
+            effect.Texture = spinner;
 
             ((BasicEffect)effect.BaseEffect).VertexColorEnabled = true;
             ((BasicEffect)effect.BaseEffect).TextureEnabled = true;
             ((BasicEffect)effect.BaseEffect).LightingEnabled = true;
 
             ((BasicEffect)effect.BaseEffect).AmbientLightColor = Color.Gray.ToVector3();
-
-            ((BasicEffect)effect.BaseEffect).DirectionalLight0.DiffuseColor = Color.LightGray.ToVector3();
-            ((BasicEffect)effect.BaseEffect).DirectionalLight0.Direction = new Vector3(0, 0, -1);
-            ((BasicEffect)effect.BaseEffect).DirectionalLight0.Enabled = true;
-            
-            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, 0, 5), graphics, ThreeDCamera.PLAYER_WASD_MOUSE);
-            currentCamera.UpVector = new Vector3(0, 0, 1);            
-            currentCamera.MouseLook = true;
+                      
+            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, -10, 2), graphics, ThreeDCamera.STATIC);
+            currentCamera.UpVector = new Vector3(0, 0, 1);
+            currentCamera.CameraYaw = -90;
 
             world = new World(currentCamera);
 
+            Plane p = new Plane(new Vector3(-10, -10, 0), new Vector3(10, 10, 0), effect, 20);
+            ((PolyRender)p.Renderer).Texture = grid;
+            p.Initialize(world);
+
+            SlotsGame.Intialize(ref world, effect);
+
             UI = new UIManager(GraphicsDevice, new Vector2(5, 5), 0, Color.Gray, 0.1F);
 
-            UI.AddElement(new UIString("sf1", currentCamera.ToString(), Color.Black), "camera");
             UI.AddElement(new UIString("sf1", "FPS: ", Color.Black), "fps");
-            UI.AddElement(new UIString("sf1", "Mouse Pos: ", Color.Black), "mouse");
-
-            terrain = new ThreeDTerrain(GraphicsDevice, new Point(256, 256), 4F, new Random().Next());
-            terrain.Initialize(world);
-            terrainHeight = terrain.GetHeightmapTex();
-
-            Ball b = new Ball(4, 16, new Vector3(0, 0, 0), effect, 8);
-            b.UpdateEvent += UpdateBall;
-            ((PolyRender)b.Renderer).Texture = tex2;
-            ((PolyRender)b.Renderer).WireFrame = true;
-            b.Initialize(world);
-
-            ((PolyRender)terrain.Renderer).Effect = effect;
+            UI.AddElement(new UIString("sf1", "", Color.Black), "cameraPos");         
         }
 
         /// <summary>
@@ -165,9 +144,8 @@ namespace Samples.Sample1
         /// </summary>
         private void UpdateUI()
         {
-            UI.GetElement("camera").Tag = world.MainCamera.ToString();
             UI.GetElement("fps").Tag = "FPS: " + FramerateCounter.FPS;
-            UI.GetElement("mouse").Tag = "Mouse Pos: " + Mouse.GetState().X + ", " + Mouse.GetState().Y;
+            UI.GetElement("cameraPos").Tag = world.MainCamera.ToString();
         }
 
         /// <summary>
@@ -176,7 +154,7 @@ namespace Samples.Sample1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -185,14 +163,7 @@ namespace Samples.Sample1
             world.Render();
             
             spriteBatch.Begin();
-            spriteBatch.Draw(terrainHeight,
-                new Rectangle(
-                    GraphicsDevice.Viewport.Width - 120,
-                    GraphicsDevice.Viewport.Height - 120,
-                    120, 120), Color.White);
-
             UI.Render(spriteBatch);
-
             spriteBatch.End();
 
             FramerateCounter.OnDraw(gameTime);
@@ -201,25 +172,22 @@ namespace Samples.Sample1
         }
 
         /// <summary>
-        /// Updates the camera tracking ball
+        /// Invoked when the action key is pressed
         /// </summary>
-        /// <param name="args">The update event args</param>
-        public void UpdateBall(UpdateEventArgs args)
+        /// <param name="args">The KeyDownEventArgs to use</param>
+        public void KeyPressed(KeyDownEventArgs args)
         {
-            Ball ball = (Ball)args.Instance;
-            
-            ball.Position = terrain.TranslateVector(world.MainCamera.CameraPos);
-            ball.Rotation = Math2.GetPitchRollYaw(world.MainCamera.CameraNormal);
-        }
-
-        public void QPressed(KeyDownEventArgs args)
-        {
-            world.MainCamera.MouseLook = !world.MainCamera.MouseLook;
+            SlotsGame.StartSpin();
         }
         
+        /// <summary>
+        /// Loads a byte[] from an embedded resource
+        /// </summary>
+        /// <param name="name">The name of the embeddded resource to load</param>
+        /// <returns>A byte[] containing the file's data</returns>
         internal static byte[] LoadEffectResource(string name)
         {
-            Stream stream = File.OpenRead(Directory.GetCurrentDirectory()  + "/" + name);
+            Stream stream = File.OpenRead(Directory.GetCurrentDirectory() + "\\Content\\Shaders\\BasicShader.xnb");
 
             using (var ms = new MemoryStream())
             {

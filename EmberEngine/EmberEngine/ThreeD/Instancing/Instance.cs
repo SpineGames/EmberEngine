@@ -6,19 +6,52 @@ using Microsoft.Xna.Framework;
 using EmberEngine.ThreeD.Instancing;
 using EmberEngine.ThreeD;
 using EmberEngine.ThreeD.Rendering;
+using EmberEngine.Tools.AdvancedMath;
 
 namespace EmberEngine.ThreeD.Instancing
 {
     public class Instance : IWorldComponent
     {
+        /// <summary>
+        /// Gets or sets this instance's Position
+        /// </summary>
         public Vector3 Position;
+        /// <summary>
+        /// Gets or sets the normal for this instance's velocity
+        /// </summary>
         public Vector3 VelocityNormal;
+        /// <summary>
+        /// Gets or sets this instance's speed
+        /// </summary>
         public float Velocity;
-        public Vector3 FacingPolar;
+        /// <summary>
+        /// Gets or sets this instance's rotation around each axis in <b>RADIANS</b>
+        /// </summary>
+        public Vector3 Rotation;
+        /// <summary>
+        /// Gets or set's this instaces rotation speed around each axis in <b>RADIANS</b>
+        /// </summary>
+        public Vector3 RotationSpeed;
+        /// <summary>
+        /// Gets or sets this instance's Renderer
+        /// </summary>
         public IRenderable Renderer;
-        public World World;
+        private World world;
+        /// <summary>
+        /// Gets the world that this instance exists in
+        /// </summary>
+        public World World
+        {
+            get { return world; }
+        }
 
+        /// <summary>
+        /// Called when this instance is updated
+        /// </summary>
         public UpdateEventHandler UpdateEvent;
+        /// <summary>
+        /// Called when this instance is rendered
+        /// </summary>
         public RenderEventHandler RenderEvent;
 
         private int id;
@@ -41,7 +74,7 @@ namespace EmberEngine.ThreeD.Instancing
         /// <param name="world">The world to add the instance to</param>
         public void Initialize(World world)
         {
-            this.World = world;
+            this.world = world;
             id = world.AddInstance(this);
         }
 
@@ -53,6 +86,11 @@ namespace EmberEngine.ThreeD.Instancing
         {
             if (UpdateEvent != null)
                 UpdateEvent.Invoke(new UpdateEventArgs(World, this, gameTime));
+
+            Rotation += RotationSpeed;
+            Rotation.X = (float)Math2.Wrap(0, Math.PI * 2, Rotation.X);
+            Rotation.Y = (float)Math2.Wrap(0, Math.PI * 2, Rotation.Y);
+            Rotation.Z = (float)Math2.Wrap(0, Math.PI * 2, Rotation.Z);
             
             Position += VelocityNormal * Velocity;
         }
@@ -67,8 +105,9 @@ namespace EmberEngine.ThreeD.Instancing
                 RenderEvent.Invoke(new RenderEventArgs(World, ref World.instances[ID], camera));
 
             Renderer.World =
-                Matrix.CreateRotationX(FacingPolar.X) *
-                Matrix.CreateRotationZ(FacingPolar.Z) * 
+                Matrix.CreateRotationX(Rotation.X) *
+                Matrix.CreateRotationY(Rotation.Y) *
+                Matrix.CreateRotationZ(Rotation.Z) * 
                 Matrix.CreateTranslation(Position);
 
             Renderer.Render(camera);

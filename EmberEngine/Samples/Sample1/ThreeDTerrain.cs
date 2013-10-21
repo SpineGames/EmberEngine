@@ -141,8 +141,8 @@ namespace Samples.Sample1
         /// <returns>The surface position at {x, y}</returns>
         public Vector3 TranslateVector(Vector3 position)
         {
-            position.X = MathHelper.Clamp(position.X, 0, Size.X - scale);
-            position.Y = MathHelper.Clamp(position.Y, 0, Size.Y - scale);
+            position.X = MathHelper.Clamp(position.X, 0, Size.X - (scale * 2));
+            position.Y = MathHelper.Clamp(position.Y, 0, Size.Y - (scale * 2));
 
             return new Vector3(
                 position.X,
@@ -158,7 +158,7 @@ namespace Samples.Sample1
         /// <returns>True if {x,y} is within this terrain's range</returns>
         public bool ExistsInTerrain(float x, float y)
         {
-            return x >= 0 & y >= 0 & x <= (size.X - 1) * scale & y <= (size.Y - 1) * scale;
+            return x >= 0 & y >= 0 & x <= (size.X - 2) * scale & y <= (size.Y - 2) * scale;
         }
 
         /// <summary>

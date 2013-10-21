@@ -1,7 +1,7 @@
 ﻿#region Using Statements
+using System;
 #endregion
 
-using System;
 namespace EmberEngine
 {
 #if WINDOWS || LINUX

@@ -12,7 +12,7 @@ float DiffuseIntensity = 0.1;
   
 texture Texture;
 sampler2D textureSampler = sampler_state {
-    Texture = (Texture);
+    Texture = Texture;
     MinFilter = Point;
     MagFilter = Point;
     AddressU = Wrap;

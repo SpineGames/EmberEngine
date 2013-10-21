@@ -13,47 +13,18 @@ namespace EmberEngine.ThreeD.Rendering.ShaderWrappers
     /// <summary>
     /// A wrapper around the standard shader
     /// </summary>
-    public class BasicShader
-    {
-        /// <summary>
-        /// Gets a dictionary of all Effect Parameters
-        /// </summary>
-        public Dictionary<string, EffectParameter> Parameters = new Dictionary<string, EffectParameter>();
-
-        /// <summary>
-        /// The Effect to render with
-        /// </summary>
-        public readonly Effect BaseEffect;
-
+    public class BasicShader : Shader
+    {        
         #region Transform
-        Matrix world;
-        public Matrix World
+        /// <summary>
+        /// The world transform on this shader
+        /// </summary>
+        public Matrix WorldViewProj
         {
-            get { return world; }
+            get { return base.GetParameterMatrix("WorldViewProj"); }
             set
             {
-                world = value;
-                BaseEffect.Parameters["World"].SetValue(world);
-            }
-        }
-        Matrix view;
-        public Matrix View
-        {
-            get { return view; }
-            set
-            {
-                view = value;
-                BaseEffect.Parameters["View"].SetValue(view);
-            }
-        }
-        Matrix projection;
-        public Matrix Projection
-        {
-            get { return projection; }
-            set
-            {
-                projection = value;
-                BaseEffect.Parameters["Projection"].SetValue(projection);
+                base.SetParameterMatrix("WorldViewProj", value);
             }
         }
         #endregion
@@ -62,19 +33,25 @@ namespace EmberEngine.ThreeD.Rendering.ShaderWrappers
         /// <summary>
         /// The color of the ambient lighting
         /// </summary>
-        public Vector4 AmbientLightColor
+        public Color AmbientColor
         {
-            get { return BaseEffect.Parameters["AmbientColor"].GetValueVector4(); }
-            set { BaseEffect.Parameters["AmbientColor"].SetValue(value); }
+            get { return base.GetParameterColor("AmbientColor"); }
+            set
+            {
+                base.SetParameterColor("AmbientColor", value);
+            }
         }
 
         /// <summary>
-        /// The intensity for the ambient lighting. Default is 0.1
+        /// The intensity of the ambient lighting
         /// </summary>
-        public float AmbientLightIntensity
+        public float AmbientIntensity
         {
-            get { return BaseEffect.Parameters["AmbientIntensity"].GetValueSingle(); }
-            set { BaseEffect.Parameters["AmbientIntensity"].SetValue(value); }
+            get { return base.GetParameterFloat("AmbientIntensity"); }
+            set
+            {
+                base.SetParameterFloat("AmbientIntensity", value);
+            }
         }
 
         /// <summary>
@@ -110,31 +87,24 @@ namespace EmberEngine.ThreeD.Rendering.ShaderWrappers
         /// </summary>
         public Texture2D Texture
         {
-            get { return BaseEffect.Parameters["Texture"].GetValueTexture2D(); }
-            set { BaseEffect.Parameters["Texture"].SetValue(value); }
+            get { return base.GetParameterTexture("Texture"); }
+            set { base.SetParameterTexture("Texture", value); }
         }
         
         /// <summary>
         /// Creates a new standardeffect
         /// </summary>
         /// <param name="BaseEffect">The Effect to use</param>
-        public BasicShader(Effect BaseEffect)
-        {
-            this.BaseEffect = BaseEffect;
-
-            foreach (EffectParameter param in BaseEffect.Parameters)
-            {
-                this.Parameters.Add(param.Name, param);
-            }
-        }
+        public BasicShader(BasicEffect BaseEffect) : base((Effect)BaseEffect)
+        {        }
 
         /// <summary>
         /// Creates a clone of this shader
         /// </summary>
         /// <returns>An exact clone of this shader</returns>
-        public BasicShader Clone()
+        public override Shader Clone()
         {
-            BasicShader temp = new BasicShader(BaseEffect.Clone());
+            BasicShader temp = new BasicShader((BasicEffect)BaseEffect.Clone());
             
             return temp;
         }

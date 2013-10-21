@@ -334,68 +334,17 @@ namespace EmberEngine.ThreeD
         /// <param name="ViewName">The effect parameter name to apply the view to</param>
         /// <param name="ProjectionName">The effect parameter name to apply the projection to</param>
         /// <param name="WorldName">The effect parameter name to apply the world to</param>
-        public void ApplyToEffect(Effect Effect, string ViewName = "View", 
+        public void ApplyToEffect(Shader Shader, Matrix World, string ViewName = "View", 
             string ProjectionName = "Projection", string WorldName = "World")
         {
-            if (Effect.Parameters.ElementAt(3).Name != "WorldViewProj")
+            if (!Shader.HasParameter("WorldViewProj"))
             {
-                Effect.Parameters[ViewName].SetValue(View);
-                Effect.Parameters[ProjectionName].SetValue(Projection);
-                Effect.Parameters[WorldName].SetValue(World);
+                Shader.SetParameterMatrix(ViewName, View);
+                Shader.SetParameterMatrix(ProjectionName, Projection);
+                Shader.SetParameterMatrix(WorldName, this.World * World);
             }
             else
-                Effect.Parameters["WorldViewProj"].SetValue(World * View * Projection);
-        }
-
-        /// <summary>
-        /// Applies this camera's view parameters to a shader
-        /// </summary>
-        /// <param name="Effect">The shader to apply to</param>
-        /// <param name="ViewName">The shader parameter name to apply the view to</param>
-        /// <param name="ProjectionName">The shader parameter name to apply the projection to</param>
-        /// <param name="WorldName">The shader parameter name to apply the world to</param>
-        public void ApplyToEffect(BasicShader Effect, string ViewName = "View",
-            string ProjectionName = "Projection", string WorldName = "World")
-        {
-            if (!Effect.Parameters.ContainsKey("WorldViewProj"))
-            {
-                if (Effect.Parameters.ContainsKey(ViewName))
-                    Effect.Parameters[ViewName].SetValue(View);
-
-                if (Effect.Parameters.ContainsKey(ProjectionName))
-                    Effect.Parameters[ProjectionName].SetValue(Projection);
-
-                if (Effect.Parameters.ContainsKey(WorldName))
-                    Effect.Parameters[WorldName].SetValue(World);
-            }
-            else
-                Effect.Parameters["WorldViewProj"].SetValue(World * View * Projection);
-        }
-
-        /// <summary>
-        /// Applies this camera's view parameters to a shader
-        /// </summary>
-        /// <param name="Effect">The shader to apply to</param>
-        /// <param name="world">The world transformation</param>
-        /// <param name="ViewName">The shader parameter name to apply the view to</param>
-        /// <param name="ProjectionName">The shader parameter name to apply the projection to</param>
-        /// <param name="WorldName">The shader parameter name to apply the world to</param>
-        public void ApplyToEffect(BasicShader Effect, Matrix world, string ViewName = "View",
-            string ProjectionName = "Projection", string WorldName = "World")
-        {
-            if (!Effect.Parameters.ContainsKey("WorldViewProj"))
-            {
-                if (Effect.Parameters.ContainsKey(ViewName))
-                    Effect.Parameters[ViewName].SetValue(View);
-
-                if (Effect.Parameters.ContainsKey(ProjectionName))
-                    Effect.Parameters[ProjectionName].SetValue(Projection);
-
-                if (Effect.Parameters.ContainsKey(WorldName))
-                    Effect.Parameters[WorldName].SetValue(World * world);
-            }
-            else
-                Effect.Parameters["WorldViewProj"].SetValue(World * world * View * Projection);
+                Shader.SetParameterMatrix("WorldViewProj", this.World * World * View * Projection);
         }
 
         #region Input
@@ -499,6 +448,37 @@ namespace EmberEngine.ThreeD
             MouseSensitivity = 0.1F,
 
             KeyLookSensitivity = 1F,
+
+            LookUp = new KeyWatcher(Key.Up),
+            LookDown = new KeyWatcher(Key.Down),
+            LookLeft = new KeyWatcher(Key.Left),
+            LookRight = new KeyWatcher(Key.Right)
+        };
+        #endregion
+
+        #region STATIC
+        /// <summary>
+        /// Prebuilt camera options for a static camera
+        /// </summary>
+        public static readonly CameraMoveOptions STATIC = new CameraMoveOptions()
+        {
+            CanMove = false,
+
+            ForwardSpeed = 0F,
+            BackwardSpeed = 0F,
+            StrafeSpeed = 0,
+
+            Forward = new KeyWatcher(Key.W),
+            Backward = new KeyWatcher(Key.S),
+            Left = new KeyWatcher(Key.A),
+            Right = new KeyWatcher(Key.D),
+
+            CanLook = false,
+
+            MouseLook = false,
+            MouseSensitivity = 0F,
+
+            KeyLookSensitivity = 0,
 
             LookUp = new KeyWatcher(Key.Up),
             LookDown = new KeyWatcher(Key.Down),

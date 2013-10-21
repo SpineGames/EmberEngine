@@ -33,6 +33,25 @@ namespace EmberEngine.Tools.AdvancedMath
         }
 
         /// <summary>
+        /// Wraps the given value between a min and a max
+        /// </summary>
+        /// <param name="min">The minimum value to wrap to</param>
+        /// <param name="max">The maximum value to wrap to</param>
+        /// <param name="val">The value to wrap</param>
+        /// <returns><i>val</i> wrapped between <i>max</i> and <i>min</i></returns>
+        public static double Wrap(double min, double max, double val)
+        {
+            double range = max - min;
+
+            while (val < min)
+                val += range;
+            while (val > max)
+                val -= range;
+
+            return val;
+        }
+
+        /// <summary>
         /// Gets the change in x over the given length from an angle
         /// </summary>
         /// <param name="angle">The angle in <b>degrees</b></param>
@@ -66,6 +85,24 @@ namespace EmberEngine.Tools.AdvancedMath
         }
 
         /// <summary>
+        /// Gets the texture co-ord for a sphere
+        /// </summary>
+        /// <param name="yaw">The yaw from centre</param>
+        /// <param name="pitch">The pitch from centre</param>
+        /// <param name="length">The radius</param>
+        /// <param name="texTile">The number of times to tile the texture</param>
+        /// <returns>The tex co-ords for the given spot on the sphere</returns>
+        public static Vector2 GetUVForSphere(double yaw, double pitch, double length, float texTile = 1)
+        {
+            Vector3 Normal = GetFromYawPitch(yaw, pitch, length);
+            
+            float x = MathHelper.Lerp(0.0F, texTile, (float)(yaw / 360.0)); ///0.5F + (float)(Math.Atan2(Normal.Y, Normal.X) / (Math.PI * 2)) * texTile;
+            float y = MathHelper.Lerp(0.0F, texTile, (float)(pitch / 360.0)); ///0.5F - (float)(Math.Asin(Normal.Y) / Math.PI) * texTile;
+
+            return new Vector2(x, y);
+        }
+
+        /// <summary>
         /// Gets a Vector3 from yaw, pitch, and roll
         /// </summary>
         /// <param name="yaw">The yaw to use in <b>degrees</b></param>
@@ -84,11 +121,11 @@ namespace EmberEngine.Tools.AdvancedMath
         }
 
         /// <summary>
-        /// Get the yaw pitch and roll from the normal
+        /// Get the yaw pitch and roll from the normal in <b>radians</b>
         /// </summary>
         /// <param name="normal">The normal to calculate the angle from</param>
         /// <returns>{Pitch, Roll, Yaw} all in <b>radians</b></returns>
-        public static Vector3 GetYawPitchRoll(Vector3 normal)
+        public static Vector3 GetPitchRollYaw(Vector3 normal)
         {
             normal.Normalize();
 

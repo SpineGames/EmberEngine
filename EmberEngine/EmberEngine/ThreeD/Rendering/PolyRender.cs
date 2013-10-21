@@ -54,7 +54,7 @@ namespace EmberEngine.ThreeD.Rendering
         /// <summary>
         /// Gets or sets this poly-renderer's Effect
         /// </summary>
-        public BasicShader Effect;
+        public Shader Effect;
         /// <summary>
         /// The effects name for the World matrix
         /// </summary>
@@ -81,6 +81,7 @@ namespace EmberEngine.ThreeD.Rendering
         Texture2D tex;
         /// <summary>
         /// Gets or sets the texture
+        /// Note: All shader's must have texture parameter called 'Texture'
         /// </summary>
         public Texture2D Texture
         {
@@ -88,7 +89,7 @@ namespace EmberEngine.ThreeD.Rendering
             set
             {
                 tex = value;
-                Effect.Texture = tex;
+                Effect.SetParameterTexture("Texture", tex);
             }
         }
 
@@ -102,7 +103,7 @@ namespace EmberEngine.ThreeD.Rendering
             set
             {
                 wireFrame = value;
-                Graphics.RasterizerState = wireFrame ? wireframe : solid;
+                Graphics.RasterizerState = value ? wireframe : solid;
             }
         }
 
@@ -158,7 +159,7 @@ namespace EmberEngine.ThreeD.Rendering
         /// Creates a new poly renderer
         /// </summary>
         /// <param name="World">The world transformation to use</param>
-        public PolyRender(BasicShader shader)
+        public PolyRender(Shader shader)
         {
             this.Effect = shader.Clone();
             this.Graphics = shader.BaseEffect.GraphicsDevice;
