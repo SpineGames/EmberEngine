@@ -30,7 +30,7 @@ namespace Samples.Sample1
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Sample : Game
+    public class Sample : GameComponent, ISample
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -45,15 +45,15 @@ namespace Samples.Sample1
         UIManager UI;
         KeyManager keys;
         
-        public Sample()
-            : base()
+        public Sample(Game game)
+            : base(game)
         {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            graphics = new GraphicsDeviceManager(game);
 
-            Window.Title = "Ember Engine Test";
+            game.Window.Title = "Ember Engine Test";
+            Enabled = true;
 
-            PolyRender.Initialize(CullMode.CullCounterClockwiseFace);
+            PolyRender_VPCNT.Initialize(CullMode.CullCounterClockwiseFace);
         }
 
         /// <summary>
@@ -62,13 +62,15 @@ namespace Samples.Sample1
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
-        protected override void Initialize()
+        public override void Initialize()
         {
             //GraphicsDevice.RasterizerState.CullMode = CullMode.None;
             keys = new KeyManager();
 
             keys.AddKeyWatcher(new KeyWatcher(Key.Q));
             keys.Watchers[0].AddPressed(QPressed);
+
+            LoadContent();
 
             base.Initialize();
         }
@@ -77,20 +79,19 @@ namespace Samples.Sample1
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        protected override void LoadContent()
+        private void LoadContent()
         {
             byte[] temp = LoadEffectResource("Content/Common/Shaders/BasicShader.xnb");
 
             byte _Version = temp[4];
-            Effect e = Content.Load<Effect>("Common/Shaders/StandardShader");
+            Effect e = Game.Content.Load<Effect>("Common/Shaders/StandardShader");
 
             BasicShader effect = new BasicShader(new BasicEffect(GraphicsDevice));
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            tex = Content.Load<Texture2D>("Sample1/Terrain/terrain_2");
-            Texture2D tex2 = Content.Load<Texture2D>("Sample1/Terrain/terrain_0");
-            FontManager.LoadFont(Content, "Common/Font/sf1");
+            tex = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_2");
+            Texture2D tex2 = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_0");
             
             effect.Texture = tex;
 
@@ -104,7 +105,7 @@ namespace Samples.Sample1
             ((BasicEffect)effect.BaseEffect).DirectionalLight0.Direction = new Vector3(0, 0, -1);
             ((BasicEffect)effect.BaseEffect).DirectionalLight0.Enabled = true;
             
-            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, 0, 5), graphics, ThreeDCamera.PLAYER_WASD_MOUSE);
+            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, 0, 5), GraphicsDevice, ThreeDCamera.PLAYER_WASD_MOUSE);
             currentCamera.UpVector = new Vector3(0, 0, 1);            
             currentCamera.MouseLook = true;
 
@@ -122,20 +123,11 @@ namespace Samples.Sample1
 
             Ball b = new Ball(4, 16, new Vector3(0, 0, 0), effect, 8);
             b.UpdateEvent += UpdateBall;
-            ((PolyRender)b.Renderer).Texture = tex2;
-            ((PolyRender)b.Renderer).WireFrame = true;
+            ((PolyRender_VPCNT)b.Renderer).Texture = tex2;
+            ((PolyRender_VPCNT)b.Renderer).WireFrame = true;
             b.Initialize(world);
 
-            ((PolyRender)terrain.Renderer).Effect = effect;
-        }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
+            ((PolyRender_MULTITEX)terrain.Renderer).Effect = effect;
         }
 
         /// <summary>
@@ -143,14 +135,14 @@ namespace Samples.Sample1
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
+        new public void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Key.Escape))
-                this.Exit();
+                this.Dispose();
 
             world.Update(gameTime);
 
-            if (!IsActive)
+            if (!Game.IsActive)
                 world.MainCamera.MouseLook = false;
 
             keys.Update();
@@ -174,7 +166,7 @@ namespace Samples.Sample1
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             
@@ -196,8 +188,6 @@ namespace Samples.Sample1
             spriteBatch.End();
 
             FramerateCounter.OnDraw(gameTime);
-
-            base.Draw(gameTime);
         }
 
         /// <summary>

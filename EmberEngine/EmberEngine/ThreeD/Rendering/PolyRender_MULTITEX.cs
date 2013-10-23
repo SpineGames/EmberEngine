@@ -14,12 +14,12 @@ namespace EmberEngine.ThreeD.Rendering
     /// <summary>
     /// Used to render polygons
     /// </summary>
-    public class PolyRender : IRenderable
+    public class PolyRender_MULTITEX : IRenderable
     {
         /// <summary>
         /// The buffer for all vertices
         /// </summary>
-        VertexPositionColorNormalTexture[] Buffer = new VertexPositionColorNormalTexture[] { };
+        VertexMultitextured[] Buffer = new VertexMultitextured[] { };
         /// <summary>
         /// The indeces used to speed up rendering
         /// </summary>
@@ -36,7 +36,7 @@ namespace EmberEngine.ThreeD.Rendering
         /// <summary>
         /// The temporary buffer for the non-opaque vertices
         /// </summary>
-        List<VertexPositionColorNormalTexture> Temp = new List<VertexPositionColorNormalTexture>();
+        List<VertexMultitextured> Temp = new List<VertexMultitextured>();
 
         /// <summary>
         /// The world transformation for this renderer
@@ -150,7 +150,7 @@ namespace EmberEngine.ThreeD.Rendering
         /// Creates a new poly renderer
         /// </summary>
         /// <param name="graphics">The GraphicsDevice to use</param>
-        public PolyRender(GraphicsDevice graphics)
+        public PolyRender_MULTITEX(GraphicsDevice graphics)
         {
             this.Graphics = graphics;
         }
@@ -159,7 +159,7 @@ namespace EmberEngine.ThreeD.Rendering
         /// Creates a new poly renderer
         /// </summary>
         /// <param name="World">The world transformation to use</param>
-        public PolyRender(Shader shader)
+        public PolyRender_MULTITEX(Shader shader)
         {
             this.Effect = shader.Clone();
             this.Graphics = shader.BaseEffect.GraphicsDevice;
@@ -171,7 +171,7 @@ namespace EmberEngine.ThreeD.Rendering
         public void Clear()
         {
             Temp.Clear();
-            Buffer = new VertexPositionColorNormalTexture[0];
+            Buffer = new VertexMultitextured[0];
             Indices = new int[0];
         }
         
@@ -179,7 +179,7 @@ namespace EmberEngine.ThreeD.Rendering
         /// Adds a range of non-opaque vertices to the temp buffer
         /// </summary>
         /// <param name="buffer">The buffer to append</param>
-        public void AddPolys(VertexPositionColorNormalTexture[] buffer)
+        public void AddPolys(VertexMultitextured[] buffer)
         {
             Temp.AddRange(buffer);
         }
@@ -232,7 +232,7 @@ namespace EmberEngine.ThreeD.Rendering
                 {
                     p.Apply();
 
-                    Graphics.DrawUserIndexedPrimitives<VertexPositionColorNormalTexture>(
+                    Graphics.DrawUserIndexedPrimitives<VertexMultitextured>(
                         RenderType, Buffer, 0, VertCount, Indices, 0, PrimitiveCount);
                 }
             }

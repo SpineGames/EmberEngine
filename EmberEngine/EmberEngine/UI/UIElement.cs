@@ -47,10 +47,24 @@ namespace EmberEngine.UI
             }
         }
 
+        object tag;
         /// <summary>
         /// Gets or sets this UIElement's meta-tag
         /// </summary>
-        public object Tag;
+        public object Tag
+        {
+            get { return tag; }
+            set
+            {
+                tag = value;
+                if (TagChanged != null)
+                    TagChanged.Invoke(this, new EventArgs());
+            }
+        }
+        /// <summary>
+        /// Gets or sets the event handler raised when the object tag changes
+        /// </summary>
+        public EventHandler TagChanged;
 
         /// <summary>
         /// Called when this UI element should render

@@ -40,7 +40,7 @@ namespace EmberEngine.ThreeD
         /// <summary>
         /// The graphics device manager that this camera was created on
         /// </summary>
-        GraphicsDeviceManager graphics;
+        GraphicsDevice graphics;
 
         /// <summary>
         /// The private acessor for keyManager
@@ -211,7 +211,7 @@ namespace EmberEngine.ThreeD
         /// </summary>
         /// <param name="Position">The camera's position</param>
         /// <param name="graphics">The GraphicsDeviceManager to use</param>
-        public ThreeDCamera(Vector3 Position, GraphicsDeviceManager graphics, CameraMoveOptions MoveOptions)
+        public ThreeDCamera(Vector3 Position, GraphicsDevice graphics, CameraMoveOptions MoveOptions)
         {
             this.cameraPos = Position;
             this.cameraNormal = new Vector3(1, 0, 0);
@@ -220,8 +220,8 @@ namespace EmberEngine.ThreeD
             view = new ViewParameters();
             view.Projection = Matrix.CreatePerspectiveFieldOfView(
                 MathHelper.ToRadians(60),
-                (float)graphics.GraphicsDevice.Viewport.Width /
-                (float)graphics.GraphicsDevice.Viewport.Height,
+                (float)graphics.Viewport.Width /
+                (float)graphics.Viewport.Height,
                 0.1f, 1000.0f);
 
             view.View = Matrix.CreateLookAt(CameraPos, CameraPos + CameraNormal, new Vector3(0, 0, 1));
@@ -246,8 +246,8 @@ namespace EmberEngine.ThreeD
                 keyManager.AddKeyWatcher(MoveOptions.LookRight.AddDown(OnLookRightDown));
             }
 
-            int centreX = graphics.GraphicsDevice.Viewport.Width / 2;
-            int centreY = graphics.GraphicsDevice.Viewport.Height / 2;
+            int centreX = graphics.Viewport.Width / 2;
+            int centreY = graphics.Viewport.Height / 2;
 
             Microsoft.Xna.Framework.Input.Mouse.SetPosition(centreX, centreY);
         }
@@ -285,8 +285,8 @@ namespace EmberEngine.ThreeD
             {
                 Microsoft.Xna.Framework.Input.MouseState m = Microsoft.Xna.Framework.Input.Mouse.GetState();
 
-                int centreX = graphics.GraphicsDevice.Viewport.Width / 2;
-                int centreY = graphics.GraphicsDevice.Viewport.Height / 2;
+                int centreX = graphics.Viewport.Width / 2;
+                int centreY = graphics.Viewport.Height / 2;
 
                 int xChange = centreX - m.X;
                 int yChange = centreY - m.Y;

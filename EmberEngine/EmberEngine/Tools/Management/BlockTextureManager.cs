@@ -9,7 +9,7 @@ using OpenTK.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace EmberEngine.Management.Tools
+namespace EmberEngine.Tools.Management
 {
     /// <summary>
     /// Manages a single texture that contains multiple sub textures, and gets their corners

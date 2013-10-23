@@ -11,6 +11,7 @@ using EmberEngine.ThreeD;
 using EmberEngine.ThreeD.Rendering;
 using EmberEngine.Tools.AdvancedMath;
 using EmberEngine.Tools.AdvancedMath.Noise;
+using EmberEngine.ThreeD.Rendering.ShaderWrappers;
 
 namespace Samples.Sample1
 {
@@ -166,9 +167,9 @@ namespace Samples.Sample1
         /// </summary>
         private void RebuildVerts()
         {
-            Renderer = new PolyRender(graphics);
+            PolyRender_MULTITEX Render = new PolyRender_MULTITEX(graphics);
 
-            VertexPositionColorNormalTexture[] temp = new VertexPositionColorNormalTexture[size.X * size.Y];
+            VertexMultitextured[] temp = new VertexMultitextured[size.X * size.Y];
             List<int> iBuffer = new List<int>();
 
             for (int x = 0; x < size.X; x++)
@@ -180,8 +181,13 @@ namespace Samples.Sample1
                     //v0 - v1, v1 - v2
                     Vector3 N1 = new Vector3(0, 0, 1);
 
-                    temp[(y * size.X) + x] = new VertexPositionColorNormalTexture(TL, N1, 
-                        new Vector2(x * scale, y * scale), Color.White);
+                    temp[(y * size.X) + x] = new VertexMultitextured(TL, N1, 
+                        new Vector2(x * scale, y * scale), 
+                        new Vector4(
+                            MathHelper.Clamp(1.0f - Math.Abs(heightmap[x, y] - 0) / 8.0f, 0, 1),
+                            MathHelper.Clamp(1.0f - Math.Abs(heightmap[x, y] - 12) / 6.0f, 0, 1),
+                            MathHelper.Clamp(1.0f - Math.Abs(heightmap[x, y] - 20) / 6.0f, 0, 1),
+                            MathHelper.Clamp(1.0f - Math.Abs(heightmap[x, y] - 30) / 6.0f, 0, 1)));
                 }
             }
 
@@ -212,8 +218,10 @@ namespace Samples.Sample1
                 temp[iBuffer[i * 3 + 2]].Normal = normal;
             }
 
-            ((PolyRender)Renderer).AddPolys(temp);
-            ((PolyRender)Renderer).FinalizePolys(iBuffer.ToArray());
+            Render.AddPolys(temp);
+            Render.FinalizePolys(iBuffer.ToArray());
+
+            Renderer = Render;
         }
     }
 }

@@ -11,9 +11,20 @@ using EmberEngine.ThreeD.Rendering.ShaderWrappers;
 
 namespace Samples.Sample2
 {
-    class Plane : Instance
+    /// <summary>
+    /// Represents a plane that has text on it
+    /// </summary>
+    class TextPlane : Instance
     {
-        public Plane(Vector3 Min, Vector3 Max, Shader shader,int texTile = 1)
+        /// <summary>
+        /// Creates a new Text plane
+        /// </summary>
+        /// <param name="Min">The minimum position</param>
+        /// <param name="Max">The maximum position</param>
+        /// <param name="stringRenderer">The StringRenderer to apply</param>
+        /// <param name="shader">The shader to use</param>
+        /// <param name="texTile">The number of times the texture is tiled</param>
+        public TextPlane(Vector3 Min, Vector3 Max, StringRender stringRenderer, Shader shader, int texTile = 1)
             : base(Min + ((Max - Min) / 2))
         {
             texTile = texTile < 1 ? 1: texTile;
@@ -43,6 +54,7 @@ namespace Samples.Sample2
             indices[5] = 2;
 
             PolyRender_VPCNT render = new PolyRender_VPCNT(shader);
+            render.Texture = stringRenderer;
             render.AddPolys(verts);
             render.FinalizePolys(indices);
             this.Renderer = render;

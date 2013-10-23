@@ -30,13 +30,13 @@ struct ColoredVertexShaderInput
 {
     float4 Position : POSITION0;
     float4 Normal : NORMAL0;
-	  float4 Color : COLOR0;
+	float4 Color : COLOR0;
     float2 TextureCoordinate : TEXCOORD0;
 };
  
 struct VertexShaderOutput
 {
-    float4 Position : SV_Position;
+    float4 Position : SV_POSITION;
     float4 Color : COLOR0;
     float3 Normal : TEXCOORD0;
     float2 TextureCoordinate : TEXCOORD1;
@@ -48,7 +48,8 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 
     float4 worldPosition = mul(input.Position, World);
     float4 viewPosition = mul(worldPosition, View);
-    output.Position= mul(viewPosition, Projection);
+    float4 position = mul(viewPosition, Projection);
+	output.Position = float4(position.x, position.y, position.z + sin(position.x), position.w);
 
 	float4 diffuseColor = DiffuseColor * DiffuseIntensity;
 

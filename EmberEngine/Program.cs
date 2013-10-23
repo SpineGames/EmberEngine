@@ -4,7 +4,7 @@ using System;
 
 namespace EmberEngine
 {
-#if WINDOWS || LINUX
+    #if WINDOWS || LINUX
     /// <summary>
     /// The main class.
     /// </summary>
@@ -16,9 +16,9 @@ namespace EmberEngine
         [STAThread]
         static void Main()
         {
-            using (var game = new Samples.Sample1.Sample())
+            using (var game = new Samples.SampleExplorer.SampleExplorer())
                 game.Run();
         }
     }
-#endif
+    #endif
 }

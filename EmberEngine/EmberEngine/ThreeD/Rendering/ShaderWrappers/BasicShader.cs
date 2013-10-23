@@ -28,60 +28,7 @@ namespace EmberEngine.ThreeD.Rendering.ShaderWrappers
             }
         }
         #endregion
-
-        #region DefaultLighting
-        /// <summary>
-        /// The color of the ambient lighting
-        /// </summary>
-        public Color AmbientColor
-        {
-            get { return base.GetParameterColor("AmbientColor"); }
-            set
-            {
-                base.SetParameterColor("AmbientColor", value);
-            }
-        }
-
-        /// <summary>
-        /// The intensity of the ambient lighting
-        /// </summary>
-        public float AmbientIntensity
-        {
-            get { return base.GetParameterFloat("AmbientIntensity"); }
-            set
-            {
-                base.SetParameterFloat("AmbientIntensity", value);
-            }
-        }
-
-        /// <summary>
-        /// Represents the normal for the diffuse light
-        /// </summary>
-        public Vector3 DiffuseDirection
-        {
-            get { return BaseEffect.Parameters["DiffuseLightDirection"].GetValueVector3(); }
-            set { BaseEffect.Parameters["DiffuseLightDirection"].SetValue(value); }
-        }
-
-        /// <summary>
-        /// The color for the diffuse light
-        /// </summary>
-        public Vector4 DiffuseColor
-        {
-            get { return BaseEffect.Parameters["DiffuseColor"].GetValueVector4(); }
-            set { BaseEffect.Parameters["DiffuseColor"].SetValue(value); }
-        }
-
-        /// <summary>
-        /// The color for the diffuse light
-        /// </summary>
-        public float DiffuseIntensity
-        {
-            get { return BaseEffect.Parameters["DiffuseIntensity"].GetValueSingle(); }
-            set { BaseEffect.Parameters["DiffuseIntensity"].SetValue(value); }
-        }
-        #endregion
-
+        
         /// <summary>
         /// The texture to render with
         /// </summary>

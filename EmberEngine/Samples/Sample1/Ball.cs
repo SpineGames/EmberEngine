@@ -17,7 +17,7 @@ namespace Samples.Sample1
         public Ball(float radius, int stepping, Vector3 position, BasicShader effect, int texCount = 1)
             : base(position)
         {
-            PolyRender renderer = new PolyRender(effect.Clone());
+            PolyRender_VPCNT renderer = new PolyRender_VPCNT(effect.Clone());
             Color color = Color.White;
 
             Vector3 rad = new Vector3(radius, 0, 0);

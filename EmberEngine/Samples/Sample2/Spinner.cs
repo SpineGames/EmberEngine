@@ -26,7 +26,7 @@ namespace Samples.Sample2
 
             Capsole(n, (max - min).Length(), radius, stepping, out verts);
 
-            PolyRender render = new PolyRender(shader);
+            PolyRender_VPCNT render = new PolyRender_VPCNT(shader);
             render.AddPolys(verts);
             render.FinalizePolys();
 

@@ -30,25 +30,25 @@ namespace Samples.Sample2
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Sample : GameComponent, ISample
+    public class Sample : Game
     {
+        GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         
         World world;
 
         UIManager UI;
         KeyManager keys;
-
-        StringRender text;
         
-        public Sample(Game game)
-            : base(game)
+        public Sample()
+            : base()
         {
-            Initialize();
-            game.Window.Title = "Slots Demo";
-            Enabled = true;
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
 
-            PolyRender_VPCNT.Initialize(CullMode.CullCounterClockwiseFace);
+            Window.Title = "Slots Demo";
+
+            PolyRender.Initialize(CullMode.CullCounterClockwiseFace);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Samples.Sample2
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             //GraphicsDevice.RasterizerState.CullMode = CullMode.None;
             keys = new KeyManager();
@@ -65,7 +65,6 @@ namespace Samples.Sample2
             keys.AddKeyWatcher(new KeyWatcher(Key.Enter));
             keys.Watchers[0].AddPressed(KeyPressed);
 
-            LoadContent();
             base.Initialize();
         }
 
@@ -73,20 +72,15 @@ namespace Samples.Sample2
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        private void LoadContent()
+        protected override void LoadContent()
         {
+            BasicShader effect = new BasicShader(new BasicEffect(GraphicsDevice));
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            text = new StringRender(GraphicsDevice, "Winnings", FontManager.Fonts["sf1"], Color.Red, Color.White);
-
-            spriteBatch.Begin();
-            text.RenderToTarget(spriteBatch);
-            spriteBatch.End();
-
-            BasicShader effect = new BasicShader(new BasicEffect(GraphicsDevice));
-            
-            Texture2D spinner = Game.Content.Load<Texture2D>("Sample2/Textures/Spinner");
-            Texture2D grid = Game.Content.Load<Texture2D>("Sample2/Textures/grid");
+            Texture2D spinner = Content.Load<Texture2D>("Sample2/Textures/Spinner");
+            Texture2D grid = Content.Load<Texture2D>("Sample2/Textures/grid");
+            FontManager.LoadFont(Content, "Common/Font/sf1");
             
             effect.Texture = spinner;
 
@@ -94,29 +88,33 @@ namespace Samples.Sample2
             ((BasicEffect)effect.BaseEffect).TextureEnabled = true;
             ((BasicEffect)effect.BaseEffect).LightingEnabled = true;
 
-            ((BasicEffect)effect.BaseEffect).AmbientLightColor = Color.White.ToVector3();
-
+            ((BasicEffect)effect.BaseEffect).AmbientLightColor = Color.Gray.ToVector3();
                       
-            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, -10, 2), GraphicsDevice, ThreeDCamera.STATIC);
+            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, -10, 2), graphics, ThreeDCamera.STATIC);
             currentCamera.UpVector = new Vector3(0, 0, 1);
             currentCamera.CameraYaw = -90;
 
             world = new World(currentCamera);
 
             Plane p = new Plane(new Vector3(-10, -10, 0), new Vector3(10, 10, 0), effect, 20);
-            ((PolyRender_VPCNT)p.Renderer).Texture = grid;
+            ((PolyRender)p.Renderer).Texture = grid;
             p.Initialize(world);
-
-
-            TextPlane header = new TextPlane(new Vector3(-10, 5, 3), new Vector3(10, 5, 5), text, effect);
-            header.Initialize(world);
 
             SlotsGame.Intialize(ref world, effect);
 
             UI = new UIManager(GraphicsDevice, new Vector2(5, 5), 0, Color.Gray, 0.1F);
 
-            //UI.AddElement(new UIString("sf1", "FPS: ", Color.Black), "fps");
-            //UI.AddElement(new UIString("sf1", "", Color.Black), "cameraPos");         
+            UI.AddElement(new UIString("sf1", "FPS: ", Color.Black), "fps");
+            UI.AddElement(new UIString("sf1", "", Color.Black), "cameraPos");         
+        }
+
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// all content.
+        /// </summary>
+        protected override void UnloadContent()
+        {
+            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -124,15 +122,16 @@ namespace Samples.Sample2
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public override void Update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Key.Escape))
-            {
-                this.Enabled = false;
-            }
+                this.Exit();
 
             world.Update(gameTime);
-            
+
+            if (!IsActive)
+                world.MainCamera.MouseLook = false;
+
             keys.Update();
 
             UpdateUI();
@@ -145,15 +144,15 @@ namespace Samples.Sample2
         /// </summary>
         private void UpdateUI()
         {
-            //UI.GetElement("fps").Tag = "FPS: " + FramerateCounter.FPS;
-            //UI.GetElement("cameraPos").Tag = world.MainCamera.ToString();
+            UI.GetElement("fps").Tag = "FPS: " + FramerateCounter.FPS;
+            UI.GetElement("cameraPos").Tag = world.MainCamera.ToString();
         }
 
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void Draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
             
@@ -164,18 +163,19 @@ namespace Samples.Sample2
             world.Render();
             
             spriteBatch.Begin();
-            spriteBatch.Draw(text.Texture, new Rectangle(100, 20, 75, 30), Color.White);
             UI.Render(spriteBatch);
             spriteBatch.End();
 
             FramerateCounter.OnDraw(gameTime);
+
+            base.Draw(gameTime);
         }
 
         /// <summary>
         /// Invoked when the action key is pressed
         /// </summary>
         /// <param name="args">The KeyDownEventArgs to use</param>
-        private void KeyPressed(KeyDownEventArgs args)
+        public void KeyPressed(KeyDownEventArgs args)
         {
             SlotsGame.StartSpin();
         }
