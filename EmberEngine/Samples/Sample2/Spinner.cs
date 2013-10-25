@@ -18,7 +18,7 @@ namespace Samples.Sample2
         {
             stepping = stepping < 4 ? 4: stepping;
 
-            VertexPositionColorNormalTexture[] verts = new VertexPositionColorNormalTexture[2 + stepping * 2];
+            VertexPositionNormalTextureColor[] verts = new VertexPositionNormalTextureColor[2 + stepping * 2];
             int[] indexBuffer = new int[12 * stepping];
 
             Vector3 n = max - min;
@@ -26,7 +26,7 @@ namespace Samples.Sample2
 
             Capsole(n, (max - min).Length(), radius, stepping, out verts);
 
-            PolyRender_VPCNT render = new PolyRender_VPCNT(shader);
+            PolyRender_VPNTC render = new PolyRender_VPNTC(shader);
             render.AddPolys(verts);
             render.FinalizePolys();
 
@@ -36,9 +36,9 @@ namespace Samples.Sample2
         static Random ms_random = new Random();
 
         private static void Capsole(Vector3 Normal, float height, float radius, int stepping,
-                           out VertexPositionColorNormalTexture[] vertices)
+                           out VertexPositionNormalTextureColor[] vertices)
         {
-            List<VertexPositionColorNormalTexture> verts = new List<VertexPositionColorNormalTexture>();
+            List<VertexPositionNormalTextureColor> verts = new List<VertexPositionNormalTextureColor>();
 
             Vector3 a = Math2.GetPitchRollYaw(Normal);
             Matrix Transform = Matrix.CreateFromYawPitchRoll(a.Z, a.X, 0);
@@ -89,7 +89,7 @@ namespace Samples.Sample2
 
             for(int i = 0; i < verts.Count; i++)
             {
-                VertexPositionColorNormalTexture temp;
+                VertexPositionNormalTextureColor temp;
 
                 temp.Position = Vector3.Transform(verts[i].Position, Transform);
                 temp.Normal = Vector3.TransformNormal(verts[i].Normal, Transform);

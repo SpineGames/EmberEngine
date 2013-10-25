@@ -14,7 +14,15 @@ namespace EmberEngine.ThreeD.Rendering.ShaderWrappers
     /// A wrapper around the standard shader
     /// </summary>
     public class BasicShader : Shader
-    {        
+    {
+        /// <summary>
+        /// Gets the base texture name ofr this shader
+        /// </summary>
+        public override string TexName 
+        {
+            get { return "Texture"; }        
+        }
+
         #region Transform
         /// <summary>
         /// The world transform on this shader

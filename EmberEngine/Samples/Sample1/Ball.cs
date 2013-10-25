@@ -17,12 +17,12 @@ namespace Samples.Sample1
         public Ball(float radius, int stepping, Vector3 position, BasicShader effect, int texCount = 1)
             : base(position)
         {
-            PolyRender_VPCNT renderer = new PolyRender_VPCNT(effect.Clone());
+            PolyRender_VPNTC renderer = new PolyRender_VPNTC(effect.Clone());
             Color color = Color.White;
 
             Vector3 rad = new Vector3(radius, 0, 0);
 
-            List<VertexPositionColorNormalTexture> temp = new List<VertexPositionColorNormalTexture>();
+            List<VertexPositionNormalTextureColor> temp = new List<VertexPositionNormalTextureColor>();
 
             for (int yaw = 0; yaw < stepping; yaw++) //90 circles, difference between each is 4 degrees
             {

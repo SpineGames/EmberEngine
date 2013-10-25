@@ -49,7 +49,7 @@ namespace Samples.SampleExplorer
 
             Window.Title = "Slots Demo";
 
-            PolyRender_VPCNT.Initialize(CullMode.CullCounterClockwiseFace);
+            PolyRender_VPNTC.Initialize(CullMode.CullCounterClockwiseFace);
         }
 
         /// <summary>

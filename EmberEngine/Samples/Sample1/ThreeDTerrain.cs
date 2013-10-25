@@ -12,6 +12,7 @@ using EmberEngine.ThreeD.Rendering;
 using EmberEngine.Tools.AdvancedMath;
 using EmberEngine.Tools.AdvancedMath.Noise;
 using EmberEngine.ThreeD.Rendering.ShaderWrappers;
+using EmberEngine.EmberEngine.ThreeD.Rendering;
 
 namespace Samples.Sample1
 {
@@ -48,6 +49,7 @@ namespace Samples.Sample1
             this.scale = scale;
 
             heightmap = FaultFormation.GenMap(size.X, size.Y, 32, 16, seed); //21123
+            RebuildVerts();
         }
 
         /// <summary>
@@ -86,8 +88,6 @@ namespace Samples.Sample1
         /// <param name="world">The world to add to</param>
         new public void Initialize(World world)
         {
-            RebuildVerts();
-            
             base.Initialize(world);
         }
 
@@ -108,13 +108,13 @@ namespace Samples.Sample1
                 float yOffNorm = (y % scale) / scale;
 
                 float topHeight = MathHelper.Lerp(
-                    heightmap[left, top] * scale,
-                    heightmap[left + 1, top] * scale,
+                    heightmap[left, top] ,
+                    heightmap[left + 1, top] ,
                     xOffNorm);
 
                 float bottomHeight = MathHelper.Lerp(
-                    heightmap[left, top + 1] * scale,
-                    heightmap[left + 1, top + 1] * scale,
+                    heightmap[left, top + 1] ,
+                    heightmap[left + 1, top + 1],
                     xOffNorm);
 
                 // next, interpolate between those two values to calculate the height at our
@@ -172,22 +172,48 @@ namespace Samples.Sample1
             VertexMultitextured[] temp = new VertexMultitextured[size.X * size.Y];
             List<int> iBuffer = new List<int>();
 
+            float min = heightmap.Min();
+            float max = heightmap.Max();
+
+            float range = max - min;
+
+            float RockRange = min + range;
+            float GrassRange = min + (range * 0.7F);
+            float DirtRange = min + (range * 0.3F);
+            float SandRange = min;
+
+            float RockSizeRange  = range * 0.3F;
+            float DirtSizeRange  = range * 0.3F;
+            float GrassSizeRange = range * 0.3F;
+            float SandSizeRange  = range * 0.1F;
+
             for (int x = 0; x < size.X; x++)
             {
                 for (int y = 0; y < size.Y; y++)
                 {
-                    Vector3 TL = new Vector3(x * scale, y * scale, heightmap[x,y] * scale);
+                    Vector3 TL = new Vector3(x * scale, y * scale, heightmap[x,y]);
 
                     //v0 - v1, v1 - v2
                     Vector3 N1 = new Vector3(0, 0, 1);
 
-                    temp[(y * size.X) + x] = new VertexMultitextured(TL, N1, 
-                        new Vector2(x * scale, y * scale), 
-                        new Vector4(
-                            MathHelper.Clamp(1.0f - Math.Abs(heightmap[x, y] - 0) / 8.0f, 0, 1),
-                            MathHelper.Clamp(1.0f - Math.Abs(heightmap[x, y] - 12) / 6.0f, 0, 1),
-                            MathHelper.Clamp(1.0f - Math.Abs(heightmap[x, y] - 20) / 6.0f, 0, 1),
-                            MathHelper.Clamp(1.0f - Math.Abs(heightmap[x, y] - 30) / 6.0f, 0, 1)));
+                    float z = heightmap[x, y];
+
+                    Vector4 t = new Vector4(
+                        MathHelper.Clamp(1.0f - Math.Abs(z - SandRange ) / SandSizeRange,  0, 1),
+                        MathHelper.Clamp(1.0f - Math.Abs(z - DirtRange ) / DirtSizeRange,  0, 1),
+                        MathHelper.Clamp(1.0f - Math.Abs(z - GrassRange) / GrassSizeRange, 0, 1),
+                        MathHelper.Clamp(1.0f - Math.Abs(z - RockRange ) / RockSizeRange,  0, 1));
+
+                    float total = t.X + t.Y + t.Z + t.W;
+
+                    t.X /= total;
+                    t.Y /= total;
+                    t.Z /= total;
+                    t.W /= total;
+
+                    temp[(y * size.X) + x] = new VertexMultitextured(TL, N1,
+                        Color.White,
+                        new Vector2(x * scale, y * scale), t);
                 }
             }
 

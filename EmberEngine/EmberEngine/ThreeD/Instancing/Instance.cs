@@ -7,9 +7,13 @@ using EmberEngine.ThreeD.Instancing;
 using EmberEngine.ThreeD;
 using EmberEngine.ThreeD.Rendering;
 using EmberEngine.Tools.AdvancedMath;
+using EmberEngine.Tools;
 
 namespace EmberEngine.ThreeD.Instancing
 {
+    /// <summary>
+    /// Represents a 3D instance
+    /// </summary>
     public class Instance : IWorldComponent
     {
         /// <summary>
@@ -53,6 +57,10 @@ namespace EmberEngine.ThreeD.Instancing
         /// Called when this instance is rendered
         /// </summary>
         public RenderEventHandler RenderEvent;
+        /// <summary>
+        /// Invoked when the tag object is changed
+        /// </summary>
+        public CustomEventHandler TagChanged;
 
         private int id;
         /// <summary>
@@ -61,6 +69,22 @@ namespace EmberEngine.ThreeD.Instancing
         public int ID
         {
             get { return id; }
+        }
+
+        private object tag;
+        /// <summary>
+        /// Gets or sets the tag associated with this instance
+        /// </summary>
+        public object Tag
+        {
+            get { return tag; }
+            set
+            {
+                tag = value;
+
+                if (TagChanged != null)
+                    TagChanged.Invoke(this, new CustomEventArgs(tag));
+            }
         }
         
         public Instance(Vector3 Position)

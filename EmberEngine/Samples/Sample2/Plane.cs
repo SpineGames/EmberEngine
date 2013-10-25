@@ -14,11 +14,9 @@ namespace Samples.Sample2
     class Plane : Instance
     {
         public Plane(Vector3 Min, Vector3 Max, Shader shader,int texTile = 1)
-            : base(Min + ((Max - Min) / 2))
+            : base(Vector3.Zero)
         {
-            texTile = texTile < 1 ? 1: texTile;
-
-            VertexPositionColorNormalTexture[] verts = new VertexPositionColorNormalTexture[4];
+            VertexPositionNormalTextureColor[] verts = new VertexPositionNormalTextureColor[4];
             int[] indices = new int[6];
             
             Vector3 TL = new Vector3(Min.X, Max.Y, Max.Z);
@@ -42,7 +40,40 @@ namespace Samples.Sample2
             indices[4] = 1;
             indices[5] = 2;
 
-            PolyRender_VPCNT render = new PolyRender_VPCNT(shader);
+            PolyRender_VPNTC render = new PolyRender_VPNTC(shader);
+            render.AddPolys(verts);
+            render.FinalizePolys(indices);
+            this.Renderer = render;
+        }
+
+        public Plane(Vector3 Min, Vector3 Max, Shader shader, Vector2 texTile)
+            : base(Vector3.Zero)
+        {
+            VertexPositionNormalTextureColor[] verts = new VertexPositionNormalTextureColor[4];
+            int[] indices = new int[6];
+
+            Vector3 TL = new Vector3(Min.X, Max.Y, Max.Z);
+            Vector3 BR = new Vector3(Max.X, Min.Y, Min.Z);
+
+            //TL, BR, Min
+            //v0 - v1, v1 - v2
+            Vector3 N = Vector3.Cross(TL - BR, BR - Min);
+            N.Normalize();
+
+            verts[0] = FV.VPCNT(TL, N, new Vector2(0, texTile.Y), Color.White);
+            verts[1] = FV.VPCNT(Max, N, texTile, Color.White);
+            verts[2] = FV.VPCNT(BR, N, new Vector2(texTile.X, 0), Color.White);
+            verts[3] = FV.VPCNT(Min, N, new Vector2(0), Color.White);
+
+            indices[0] = 0;
+            indices[1] = 2;
+            indices[2] = 3;
+
+            indices[3] = 0;
+            indices[4] = 1;
+            indices[5] = 2;
+
+            PolyRender_VPNTC render = new PolyRender_VPNTC(shader);
             render.AddPolys(verts);
             render.FinalizePolys(indices);
             this.Renderer = render;

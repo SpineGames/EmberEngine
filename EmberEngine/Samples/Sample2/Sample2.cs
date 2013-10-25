@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
 using OpenTK.Input;
+using EmberEngine.ThreeD.Tools;
 
 ///<Notes to self:>
 ///Fix the hackish-as-fuck shader setup... like seriously, sit down and do some thinking
@@ -36,11 +37,9 @@ namespace Samples.Sample2
         
         World world;
 
-        UIManager UI;
         KeyManager keys;
+        UIManager UI;
 
-        StringRender text;
-        
         public Sample(Game game)
             : base(game)
         {
@@ -48,7 +47,7 @@ namespace Samples.Sample2
             game.Window.Title = "Slots Demo";
             Enabled = true;
 
-            PolyRender_VPCNT.Initialize(CullMode.CullCounterClockwiseFace);
+            PolyRender_VPNTC.Initialize(CullMode.CullCounterClockwiseFace);
         }
 
         /// <summary>
@@ -64,7 +63,11 @@ namespace Samples.Sample2
 
             keys.AddKeyWatcher(new KeyWatcher(Key.Enter));
             keys.Watchers[0].AddPressed(KeyPressed);
-
+            keys.AddKeyWatcher(new KeyWatcher(Key.Escape));
+            keys.Watchers[1].AddPressed(EscPressed);
+            keys.AddKeyWatcher(new KeyWatcher(Key.R));
+            keys.Watchers[2].AddPressed(ResetPressed);
+            
             LoadContent();
             base.Initialize();
         }
@@ -77,46 +80,16 @@ namespace Samples.Sample2
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            text = new StringRender(GraphicsDevice, "Winnings", FontManager.Fonts["sf1"], Color.Red, Color.White);
-
-            spriteBatch.Begin();
-            text.RenderToTarget(spriteBatch);
-            spriteBatch.End();
-
-            BasicShader effect = new BasicShader(new BasicEffect(GraphicsDevice));
-            
-            Texture2D spinner = Game.Content.Load<Texture2D>("Sample2/Textures/Spinner");
-            Texture2D grid = Game.Content.Load<Texture2D>("Sample2/Textures/grid");
-            
-            effect.Texture = spinner;
-
-            ((BasicEffect)effect.BaseEffect).VertexColorEnabled = true;
-            ((BasicEffect)effect.BaseEffect).TextureEnabled = true;
-            ((BasicEffect)effect.BaseEffect).LightingEnabled = true;
-
-            ((BasicEffect)effect.BaseEffect).AmbientLightColor = Color.White.ToVector3();
-
-                      
             ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, -10, 2), GraphicsDevice, ThreeDCamera.STATIC);
             currentCamera.UpVector = new Vector3(0, 0, 1);
             currentCamera.CameraYaw = -90;
 
             world = new World(currentCamera);
 
-            Plane p = new Plane(new Vector3(-10, -10, 0), new Vector3(10, 10, 0), effect, 20);
-            ((PolyRender_VPCNT)p.Renderer).Texture = grid;
-            p.Initialize(world);
+            SlotsGame.Intialize(ref world, Game.GraphicsDevice, Game.Content, spriteBatch);
 
-
-            TextPlane header = new TextPlane(new Vector3(-10, 5, 3), new Vector3(10, 5, 5), text, effect);
-            header.Initialize(world);
-
-            SlotsGame.Intialize(ref world, effect);
-
-            UI = new UIManager(GraphicsDevice, new Vector2(5, 5), 0, Color.Gray, 0.1F);
-
-            //UI.AddElement(new UIString("sf1", "FPS: ", Color.Black), "fps");
-            //UI.AddElement(new UIString("sf1", "", Color.Black), "cameraPos");         
+            UI = new UIManager(Game.GraphicsDevice, new Vector2(10, 10), 1, Color.Gray, 0.2F);
+            UI.AddElement(new UIString(FontManager.Fonts["QuartzFont"], "ga", Color.Green), "Money");
         }
 
         /// <summary>
@@ -126,11 +99,6 @@ namespace Samples.Sample2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Key.Escape))
-            {
-                this.Enabled = false;
-            }
-
             world.Update(gameTime);
             
             keys.Update();
@@ -145,8 +113,7 @@ namespace Samples.Sample2
         /// </summary>
         private void UpdateUI()
         {
-            //UI.GetElement("fps").Tag = "FPS: " + FramerateCounter.FPS;
-            //UI.GetElement("cameraPos").Tag = world.MainCamera.ToString();
+            UI.GetElement("Money").Tag = "$" + SlotsGame.money;
         }
 
         /// <summary>
@@ -155,20 +122,24 @@ namespace Samples.Sample2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.Blue);
             
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
             world.Render();
-            
+
             spriteBatch.Begin();
-            spriteBatch.Draw(text.Texture, new Rectangle(100, 20, 75, 30), Color.White);
             UI.Render(spriteBatch);
             spriteBatch.End();
 
             FramerateCounter.OnDraw(gameTime);
+        }
+
+        private void ResetPressed(KeyDownEventArgs args)
+        {
+            SlotsGame.ResetGame(args);
         }
 
         /// <summary>
@@ -178,6 +149,15 @@ namespace Samples.Sample2
         private void KeyPressed(KeyDownEventArgs args)
         {
             SlotsGame.StartSpin();
+        }
+
+        /// <summary>
+        /// Invoked when the Escape key is pressed
+        /// </summary>
+        /// <param name="args">The KeyDownEventArgs to use</param>
+        private void EscPressed(KeyDownEventArgs args)
+        {
+            Enabled = false;
         }
         
         /// <summary>

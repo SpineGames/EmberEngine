@@ -32,7 +32,6 @@ namespace Samples.Sample1
     /// </summary>
     public class Sample : GameComponent, ISample
     {
-        GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
         Texture2D tex;
@@ -48,12 +47,12 @@ namespace Samples.Sample1
         public Sample(Game game)
             : base(game)
         {
-            graphics = new GraphicsDeviceManager(game);
+            Initialize();
 
             game.Window.Title = "Ember Engine Test";
             Enabled = true;
 
-            PolyRender_VPCNT.Initialize(CullMode.CullCounterClockwiseFace);
+            PolyRender_VPNTC.Initialize(CullMode.CullCounterClockwiseFace);
         }
 
         /// <summary>
@@ -69,6 +68,8 @@ namespace Samples.Sample1
 
             keys.AddKeyWatcher(new KeyWatcher(Key.Q));
             keys.Watchers[0].AddPressed(QPressed);
+            keys.AddKeyWatcher(new KeyWatcher(Key.Escape));
+            keys.Watchers[1].AddPressed(EscPressed);
 
             LoadContent();
 
@@ -84,14 +85,35 @@ namespace Samples.Sample1
             byte[] temp = LoadEffectResource("Content/Common/Shaders/BasicShader.xnb");
 
             byte _Version = temp[4];
-            Effect e = Game.Content.Load<Effect>("Common/Shaders/StandardShader");
-
+            QuadTexShader terrainShader = new QuadTexShader(Game.Content.Load<Effect>("Common/Shaders/QuadTex"));
             BasicShader effect = new BasicShader(new BasicEffect(GraphicsDevice));
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             tex = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_2");
-            Texture2D tex2 = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_0");
+
+            Texture2D tex0 = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_0");
+            Texture2D tex1 = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_1");
+            Texture2D tex2 = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_2");
+            Texture2D tex3 = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_3");
+
+            CelShader toon = new CelShader(Game.Content.Load<Effect>("Common/Shaders/CelShader"));
+
+            toon.Texture = tex0;
+            toon.DiffuseColor = Color.White;
+            toon.ToonLevel = 4;
+
+            terrainShader.Texture0 = tex0;
+            terrainShader.Texture1 = tex1;
+            terrainShader.Texture2 = tex2;
+            terrainShader.Texture3 = tex3;
+
+            terrainShader.DiffuseColor = Color.White;
+            terrainShader.DiffuseLightDirection = new Vector3(1, 1, 1);
+            terrainShader.DiffuseIntensity = 1F;
+
+            terrainShader.AmbientColor = Color.Gray;
+            terrainShader.AmbientIntensity = 1.0F;
             
             effect.Texture = tex;
 
@@ -123,11 +145,11 @@ namespace Samples.Sample1
 
             Ball b = new Ball(4, 16, new Vector3(0, 0, 0), effect, 8);
             b.UpdateEvent += UpdateBall;
-            ((PolyRender_VPCNT)b.Renderer).Texture = tex2;
-            ((PolyRender_VPCNT)b.Renderer).WireFrame = true;
+            ((PolyRender_VPNTC)b.Renderer).Texture = tex2;
+            ((PolyRender_VPNTC)b.Renderer).WireFrame = true;
             b.Initialize(world);
 
-            ((PolyRender_MULTITEX)terrain.Renderer).Effect = effect;
+            ((PolyRender_MULTITEX)terrain.Renderer).Effect = terrainShader;
         }
 
         /// <summary>
@@ -137,9 +159,6 @@ namespace Samples.Sample1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         new public void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Key.Escape))
-                this.Dispose();
-
             world.Update(gameTime);
 
             if (!Game.IsActive)
@@ -205,6 +224,11 @@ namespace Samples.Sample1
         public void QPressed(KeyDownEventArgs args)
         {
             world.MainCamera.MouseLook = !world.MainCamera.MouseLook;
+        }
+
+        public void EscPressed(KeyDownEventArgs args)
+        {
+            Enabled = false;
         }
         
         internal static byte[] LoadEffectResource(string name)

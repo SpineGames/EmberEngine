@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using EmberEngine.ThreeD;
 using EmberEngine.ThreeD.Rendering;
 using EmberEngine.ThreeD.Rendering.ShaderWrappers;
+using EmberEngine.EmberEngine.ThreeD.Rendering;
 
 namespace EmberEngine.ThreeD.Rendering
 {
@@ -89,7 +90,7 @@ namespace EmberEngine.ThreeD.Rendering
             set
             {
                 tex = value;
-                Effect.SetParameterTexture("Texture", tex);
+                Effect.SetParameterTexture(Effect.TexName, tex);
             }
         }
 

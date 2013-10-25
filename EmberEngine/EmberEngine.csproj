@@ -36,7 +36,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EmberEngine\ThreeD\Camera.cs" />
+    <Compile Include="EmberEngine\ThreeD\Tools\Camera.cs" />
     <Compile Include="EmberEngine\ThreeD\CollisionDetection\ICollidable.cs" />
     <Compile Include="EmberEngine\ThreeD\CollisionDetection\RayCollision.cs" />
     <Compile Include="EmberEngine\ThreeD\Instancing\Instance.cs" />
@@ -45,17 +45,22 @@
     <Compile Include="EmberEngine\ThreeD\Rendering\IRenderable.cs" />
     <Compile Include="EmberEngine\ThreeD\Rendering\PolyRender_VPCNT.cs" />
     <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\BasicShader.cs" />
+    <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\CelShader.cs" />
+    <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\QuadTexShader.cs" />
     <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\ReimersShader.cs" />
     <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\IShader.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\StringRender.cs" />
+    <Compile Include="EmberEngine\ThreeD\Tools\SpritebatchToTexture.cs" />
+    <Compile Include="EmberEngine\ThreeD\Tools\StringRender.cs" />
+    <Compile Include="EmberEngine\ThreeD\Rendering\VertexMultiTextured.cs" />
     <Compile Include="EmberEngine\ThreeD\Tools\FastVertices.cs" />
-    <Compile Include="EmberEngine\ThreeD\Tools\VertexPositionColorNormalTexture.cs" />
+    <Compile Include="EmberEngine\ThreeD\Rendering\VertexPositionColorNormalTexture.cs" />
     <Compile Include="EmberEngine\ThreeD\ViewParameters.cs" />
     <Compile Include="EmberEngine\ThreeD\World.cs" />
     <Compile Include="EmberEngine\Tools\AdvancedMath\Extensions.cs" />
     <Compile Include="EmberEngine\Tools\AdvancedMath\Math2.cs" />
     <Compile Include="EmberEngine\Tools\AdvancedMath\Noise\Erode.cs" />
     <Compile Include="EmberEngine\Tools\AdvancedMath\Noise\FaultFormation.cs" />
+    <Compile Include="EmberEngine\Tools\CustomEventHandler.cs" />
     <Compile Include="EmberEngine\Tools\FramerateCounter.cs" />
     <Compile Include="EmberEngine\Tools\Input\KeyManager.cs" />
     <Compile Include="EmberEngine\Tools\Input\KeyWatcher.cs" />
@@ -81,19 +86,34 @@
     <Compile Include="Samples\Sample1\ThreeDTerrain.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Sample1\Terrain\terrain_0.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sample1\Terrain\terrain_1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sample1\Terrain\terrain_2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sample2\Textures\grid.png">
+    <Content Include="Samples\Sample1\AAA - Estimated Line Count.txt" />
+    <Content Include="Samples\Sample2\AAA - Estimated Line Count.txt" />
+    <Content Include="Samples\SampleExplorer\AAA - Estimated Line Count.txt" />
+    <None Include="Content\Common\Shaders\CelShader.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sample2\Textures\Spinner.png">
+    </None>
+    <None Include="Content\Common\Shaders\CelShader2.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Common\Shaders\QuadTex.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Sample1\Terrain\terrain_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Sample1\Terrain\terrain_1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Sample1\Terrain\terrain_2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Sample2\Textures\grid.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Sample2\Textures\Spinner.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Content\Sample1\Terrain\terrain_3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
@@ -106,15 +126,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Common\Font\sf1.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <EmbeddedResource Include="Content\Common\Shaders\BasicShader.xnb">
+    <None Include="Content\Common\Shaders\BasicShader.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Content\Common\Shaders\StandardShader.xnb">
+    </None>
+    <None Include="Content\Common\Shaders\StandardShader.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <None Include="Content\Common\Shaders\ReimersTerrain.xnb" />
+    </None>
+    <None Include="Content\Common\Shaders\ReimersTerrain.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -13,15 +13,74 @@ namespace EmberEngine.ThreeD.Rendering.ShaderWrappers
     /// <summary>
     /// A wrapper around the standard shader
     /// </summary>
-    public class ReimersShader : Shader
+    public class QuadTexShader : Shader
     {
         /// <summary>
         /// Gets the base texture name ofr this shader
         /// </summary>
         public override string TexName
         {
-            get { return "xTexture0"; }
+            get { return "Texture0"; }
         }
+
+        #region Lightning
+        /// <summary>
+        /// Gets or sets this shader's ambient color
+        /// </summary>
+        public Color AmbientColor
+        {
+            get { return base.GetParameterColor("AmbientColor"); }
+            set
+            {
+                base.SetParameterColor("AmbientColor", value);
+            }
+        }
+        /// <summary>
+        /// Gets or sets the intensity of this shader's ambient lighting
+        /// </summary>
+        public float AmbientIntensity
+        {
+            get { return base.GetParameterFloat("AmbientIntensity"); }
+            set
+            {
+                base.SetParameterFloat("AmbientIntensity", value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets this shader's diffuse direction
+        /// </summary>
+        public Vector3 DiffuseLightDirection
+        {
+            get { return base.GetParameterVector3("DiffuseLightDirection"); }
+            set
+            {
+                base.SetParameterVector3("DiffuseLightDirection", value);
+            }
+        }
+        /// <summary>
+        /// Gets or sets this shader's diffuse color
+        /// </summary>
+        public Color DiffuseColor
+        {
+            get { return base.GetParameterColor("DiffuseColor"); }
+            set
+            {
+                base.SetParameterColor("DiffuseColor", value);
+            }
+        }
+        /// <summary>
+        /// Gets or sets the intensity of this shader's diffuse lighting
+        /// </summary>
+        public float DiffuseIntensity
+        {
+            get { return base.GetParameterFloat("DiffuseIntensity"); }
+            set
+            {
+                base.SetParameterFloat("DiffuseIntensity", value);
+            }
+        }
+        #endregion
 
         #region Transform
         /// <summary>
@@ -66,39 +125,39 @@ namespace EmberEngine.ThreeD.Rendering.ShaderWrappers
         /// </summary>
         public Texture2D Texture0
         {
-            get { return base.GetParameterTexture("xTexture0"); }
-            set { base.SetParameterTexture("xTexture0", value); }
+            get { return base.GetParameterTexture("Texture0"); }
+            set { base.SetParameterTexture("Texture0", value); }
         }
         /// <summary>
         /// The texture to render with
         /// </summary>
         public Texture2D Texture1
         {
-            get { return base.GetParameterTexture("xTexture1"); }
-            set { base.SetParameterTexture("xTexture1", value); }
+            get { return base.GetParameterTexture("Texture1"); }
+            set { base.SetParameterTexture("Texture1", value); }
         }
         /// <summary>
         /// The texture to render with
         /// </summary>
         public Texture2D Texture2
         {
-            get { return base.GetParameterTexture("xTexture2"); }
-            set { base.SetParameterTexture("xTexture2", value); }
+            get { return base.GetParameterTexture("Texture2"); }
+            set { base.SetParameterTexture("Texture2", value); }
         }
         /// <summary>
         /// The texture to render with
         /// </summary>
         public Texture2D Texture3
         {
-            get { return base.GetParameterTexture("xTexture3"); }
-            set { base.SetParameterTexture("xTexture3", value); }
+            get { return base.GetParameterTexture("Texture3"); }
+            set { base.SetParameterTexture("Texture3", value); }
         }
         
         /// <summary>
         /// Creates a new standardeffect
         /// </summary>
         /// <param name="BaseEffect">The Effect to use</param>
-        public ReimersShader(Effect BaseEffect)
+        public QuadTexShader(Effect BaseEffect)
             : base(BaseEffect)
         {        
             BaseEffect.CurrentTechnique = BaseEffect.Techniques["MultiTextured"];        
@@ -110,7 +169,7 @@ namespace EmberEngine.ThreeD.Rendering.ShaderWrappers
         /// <returns>An exact clone of this shader</returns>
         public override Shader Clone()
         {
-            ReimersShader temp = new ReimersShader(BaseEffect.Clone());
+            QuadTexShader temp = new QuadTexShader(BaseEffect.Clone());
             
             return temp;
         }

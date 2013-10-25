@@ -9,6 +9,8 @@ namespace EmberEngine.ThreeD.Rendering.ShaderWrappers
 {
     public abstract class Shader
     {
+        public abstract string TexName {get;}
+
         Dictionary<string, EffectParameter> Parameters = new Dictionary<string, EffectParameter>();
 
         Effect baseEffect;
