@@ -103,7 +103,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(TargetDir) "C:\Users\Skyview\Documents\GitHub\EmberEngine\EmberEngine\Content"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!--
       To modify your build process, add your task inside one of the targets below and uncomment it. 
