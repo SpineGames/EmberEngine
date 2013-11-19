@@ -157,35 +157,29 @@ namespace Samples.Sample2
             #region Win Tiles
             Plane w1 = new Plane(new Vector3(-5.5F, -0.861F, 0.0F), new Vector3(-3.5F, -0.861F, 0.75F), 
                 toon2, new Vector2(1, -1));
-            ((PolyRender_VPNTC)w1.Renderer).Texture = Textures["2MoneyWin"];
-            w1.Initialize(world);
-            IDS.Add("WinTile_Money2", w1.ID);
-
-            w1 = new Plane(new Vector3(-2.5F, -0.861F, 0.0F), new Vector3(-0.5F, -0.861F, 0.75F),
-                toon2, new Vector2(1, -1));
             ((PolyRender_VPNTC)w1.Renderer).Texture = Textures["3MoneyWin"];
             w1.Initialize(world);
             IDS.Add("WinTile_Money3", w1.ID);
 
-            w1 = new Plane(new Vector3(0.5F, -0.861F, 0.0F), new Vector3(2.5F, -0.861F, 0.75F),
+            w1 = new Plane(new Vector3(-2.5F, -0.861F, 0.0F), new Vector3(-0.5F, -0.861F, 0.75F),
                 toon2, new Vector2(1, -1));
             ((PolyRender_VPNTC)w1.Renderer).Texture = Textures["4MoneyWin"];
             w1.Initialize(world);
             IDS.Add("WinTile_Money4", w1.ID);
 
-            w1 = new Plane(new Vector3(3.5F, -0.861F, 0.0F), new Vector3(5.5F, -0.861F, 0.75F),
+            w1 = new Plane(new Vector3(0.5F, -0.861F, 0.0F), new Vector3(2.5F, -0.861F, 0.75F),
                 toon2, new Vector2(1, -1));
             ((PolyRender_VPNTC)w1.Renderer).Texture = Textures["2AnyWin"];
             w1.Initialize(world);
             IDS.Add("WinTile_Any2", w1.ID);
 
-            w1 = new Plane(new Vector3(-2.5F, -0.861F, -1.0F), new Vector3(-0.5F, -0.861F, -0.25F),
+            w1 = new Plane(new Vector3(3.5F, -0.861F, 0.0F), new Vector3(5.5F, -0.861F, 0.75F),
                 toon2, new Vector2(1, -1));
             ((PolyRender_VPNTC)w1.Renderer).Texture = Textures["3AnyWin"];
             w1.Initialize(world);
             IDS.Add("WinTile_Any3", w1.ID);
 
-            w1 = new Plane(new Vector3(0.5F, -0.861F, -1.0F), new Vector3(2.5F, -0.861F, -0.25F),
+            w1 = new Plane(new Vector3(-1F, -0.861F, -1.0F), new Vector3(1F, -0.861F, -0.25F),
                 toon2, new Vector2(1, -1));
             ((PolyRender_VPNTC)w1.Renderer).Texture = Textures["4AnyWin"];
             w1.Initialize(world);
@@ -360,12 +354,6 @@ namespace Samples.Sample2
                 maxCount = equalCount > maxCount ? equalCount : maxCount;
             }
 
-            if (GetCount(3) == 2)
-            {
-                ((CelShader)((PolyRender_VPNTC)world.instances[IDS["WinTile_Money2"]].Renderer).Effect).
-                    DiffuseColor = Color.Orange;
-                return 50;
-            }
             if (GetCount(3) == 3)
             {
                 ((CelShader)((PolyRender_VPNTC)world.instances[IDS["WinTile_Money3"]].Renderer).Effect).

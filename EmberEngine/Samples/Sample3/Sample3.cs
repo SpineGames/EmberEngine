@@ -14,19 +14,10 @@ using System;
 using System.IO;
 using OpenTK.Input;
 using EmberEngine.ThreeD.Tools;
+using EmberEngine.GUI;
+using EmberEngine.Tools.Variables;
 
-///<Notes to self:>
-///Fix the hackish-as-fuck shader setup... like seriously, sit down and do some thinking
-///
-///Runtime initialization of Random is fucked
-/// - ex:
-///  class foo
-///  {
-///     Random rand = new Random();
-///  }
-///</Note>
-
-namespace Samples.Sample2
+namespace Samples.Sample3
 {
     /// <summary>
     /// This is the main type for your game
@@ -35,16 +26,16 @@ namespace Samples.Sample2
     {
         SpriteBatch spriteBatch;
         
-        World world;
-
         KeyManager keys;
-        UIManager UI;
 
+        GUIPanel BaseContainer;
+        TString FPSTracker;
+        
         public Sample(Game game)
             : base(game)
         {
             Initialize();
-            game.Window.Title = "Slots Demo";
+            game.Window.Title = "GUI Demo";
             Enabled = true;
 
             PolyRender_VPNTC.Initialize(CullMode.CullCounterClockwiseFace);
@@ -61,13 +52,9 @@ namespace Samples.Sample2
             //GraphicsDevice.RasterizerState.CullMode = CullMode.None;
             keys = new KeyManager();
 
-            keys.AddKeyWatcher(new KeyWatcher(Key.Enter));
-            keys.Watchers[0].AddPressed(KeyPressed);
             keys.AddKeyWatcher(new KeyWatcher(Key.Tilde));
-            keys.Watchers[1].AddPressed(EscPressed);
-            keys.AddKeyWatcher(new KeyWatcher(Key.R));
-            keys.Watchers[2].AddPressed(ResetPressed);
-            
+            keys.Watchers[0].AddPressed(EscPressed);
+
             LoadContent();
             base.Initialize();
         }
@@ -80,16 +67,33 @@ namespace Samples.Sample2
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, -10, 2), GraphicsDevice, ThreeDCamera.STATIC);
-            currentCamera.UpVector = new Vector3(0, 0, 1);
-            currentCamera.CameraYaw = -90;
+            BaseContainer = new GUIPanel(new Rectangle(0, 0, 240, 240));
+            BaseContainer.Mask = Game.Content.Load<Texture2D>("Sample3/Textures/menuRoundMask");
+            BaseContainer.Texture = Game.Content.Load<Texture2D>("Sample3/Textures/rust");
 
-            world = new World(currentCamera);
+            FPSTracker = new TString();
 
-            SlotsGame.Intialize(ref world, Game.GraphicsDevice, Game.Content, spriteBatch);
+            GUIVariableRepresenter<string> fpsElement = new GUIVariableRepresenter<string>(new Rectangle(5, 5, 230, 10),
+                GUI.Fonts["GUIFont1"], FPSTracker);
 
-            UI = new UIManager(Game.GraphicsDevice, new Vector2(10, 10), 1, Color.Gray, 0.2F);
-            UI.AddElement(new UIString(FontManager.Fonts["QuartzFont"], "ga", Color.Green), "Money");
+            GUILabel GUILabel = new GUILabel(new Rectangle(5, 5, 225, 10), GUI.Fonts["GUIFont1"],
+                "null");
+            GUILabel.BackColor = Color.DarkBlue;
+            GUILabel.TextColor = Color.White;
+            GUILabel.AutoSize = true;
+            GUILabel.Text = "fus ro dah! This is supposed to wrap to the next line!";
+
+            GUITextPane textPane = new GUITextPane(new Rectangle(5, 5, GUILabel.Width, 100), 
+                GUI.Fonts["GUIFont1"]);
+            textPane.Text =
+                "this should be a really long sentance to demonstrate the awesomeness " +
+                "of the GUI text panes. :P See how long this sentence is? it extends " + 
+                "beyond the height of the pane, so a scroll bar is added, isn't that neat?";
+            textPane.Texture = Game.Content.Load<Texture2D>("Sample3/Textures/parchment");
+            
+            BaseContainer.AddComponent(fpsElement);
+            BaseContainer.AddComponent(GUILabel);
+            BaseContainer.AddComponent(textPane);
         }
 
         /// <summary>
@@ -99,21 +103,11 @@ namespace Samples.Sample2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            world.Update(gameTime);
-            
             keys.Update();
 
-            UpdateUI();
+            BaseContainer.Update(new GUIUpdateEventArgs(spriteBatch, gameTime));
 
             base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// Updates the User interface
-        /// </summary>
-        private void UpdateUI()
-        {
-            UI.GetElement("Money").Tag = "$" + SlotsGame.money;
         }
 
         /// <summary>
@@ -122,33 +116,16 @@ namespace Samples.Sample2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Blue);
-            
-            GraphicsDevice.BlendState = BlendState.Opaque;
-            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-
-            world.Render();
-
-            spriteBatch.Begin();
-            UI.Render(spriteBatch);
-            spriteBatch.End();
+            GraphicsDevice.Clear(Color.Black);
 
             FramerateCounter.OnDraw(gameTime);
-        }
+            FPSTracker.Value = "FPS: " + FramerateCounter.FPS;
+            spriteBatch.Begin();
+            spriteBatch.DrawString(GUI.Fonts["sf1"], FramerateCounter.FPS.ToString(), 
+                new Vector2(240, 10), Color.White);
+            spriteBatch.End();
 
-        private void ResetPressed(KeyDownEventArgs args)
-        {
-            SlotsGame.ResetGame(args);
-        }
-
-        /// <summary>
-        /// Invoked when the action key is pressed
-        /// </summary>
-        /// <param name="args">The KeyDownEventArgs to use</param>
-        private void KeyPressed(KeyDownEventArgs args)
-        {
-            SlotsGame.StartSpin();
+            BaseContainer.Draw(new GUIDrawEventArgs(spriteBatch));
         }
 
         /// <summary>
@@ -159,7 +136,7 @@ namespace Samples.Sample2
         {
             Enabled = false;
         }
-        
+
         /// <summary>
         /// Loads a byte[] from an embedded resource
         /// </summary>

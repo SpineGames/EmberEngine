@@ -48,53 +48,63 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Basic.fx">
+    <Compile Include="Common\Shaders\Basic.fx">
       <Name>Basic</Name>
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
-    <Compile Include="StandardShader.fx">
+    <Compile Include="Common\Shaders\StandardShader.fx">
       <Name>StandardShader</Name>
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Water.fx">
+    <Compile Include="Common\Shaders\Water.fx">
       <Name>Water</Name>
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ReimersTerrain.fx">
+    <Compile Include="Common\Shaders\ReimersTerrain.fx">
       <Name>ReimersTerrain</Name>
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="QuartzFont.spritefont">
+    <Compile Include="Common\Font\QuartzFont.spritefont">
       <Name>QuartzFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="QuadTex.fx">
+    <Compile Include="Common\Shaders\QuadTex.fx">
       <Name>QuadTex</Name>
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CelShader.fx">
+    <Compile Include="Common\Shaders\CelShader.fx">
       <Name>CelShader</Name>
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\Font\GUIFont1.spritefont">
+      <Name>GUIFont1</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(TargetDir) "C:\Users\Skyview\Documents\GitHub\EmberEngine\EmberEngine\Content"</PostBuildEvent>
+  </PropertyGroup>
   <!--
       To modify your build process, add your task inside one of the targets below and uncomment it. 
       Other similar extension points exist, see Microsoft.Common.targets.

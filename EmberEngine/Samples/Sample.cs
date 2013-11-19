@@ -39,6 +39,7 @@ namespace Samples
         bool Enabled
         {
             get;
+            set;
         }
 
         /// <summary>

@@ -14,6 +14,7 @@ using System;
 using System.IO;
 using OpenTK.Input;
 using System.Threading;
+using EmberEngine.GUI;
 
 ///<Notes to self:>
 ///Fix the hackish-as-fuck shader setup... like seriously, sit down and do some thinking
@@ -60,7 +61,7 @@ namespace Samples.SampleExplorer
         /// </summary>
         protected override void Initialize()
         {
-            //GraphicsDevice.RasterizerState.CullMode = CullMode.None;
+            GraphicsDevice.RasterizerState.CullMode = CullMode.None;
             keys = new KeyManager();
 
             this.graphics.CreateDevice();
@@ -74,17 +75,23 @@ namespace Samples.SampleExplorer
         /// </summary>
         protected override void LoadContent()
         {
+            string s = Content.RootDirectory;
+
+            GUI.Initialize(Content, "Common/Font");
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             FontManager.LoadFont(Content, "Common/Font/sf1");
             FontManager.LoadFont(Content, "Common/Font/QuartzFont");
 
             UI = new UIManager(GraphicsDevice, new Vector2(5, 5), 0, Color.Gray, 0.1F);
 
-            UI.AddElement(new UISClickableString("sf1", "<Sample 1>", Color.Black), "Sample1");
-            UI.AddElement(new UISClickableString("sf1", "<Sample 2>", Color.Black), "Sample2");
+            UI.AddElement(new UISClickableString("sf1", "< Terrain Demo >", Color.Black), "Sample1");
+            UI.AddElement(new UISClickableString("sf1", "<  Slots Game  >", Color.Black), "Sample2");
+            UI.AddElement(new UISClickableString("sf1", "<   GUI Demo   >", Color.Black), "Sample3");
 
             ((UIClickable)UI.GetElement("Sample1")).OnClick += Sample1Pressed;
             ((UIClickable)UI.GetElement("Sample2")).OnClick += Sample2Pressed;
+            ((UIClickable)UI.GetElement("Sample3")).OnClick += Sample3Pressed;
         }
 
         /// <summary>
@@ -158,7 +165,10 @@ namespace Samples.SampleExplorer
         /// <param name="args">The object tag</param>
         public void Sample1Pressed(object Tag)
         {
-            sample = new Sample1.Sample(this);
+            if (sample == null || sample.GetType() != typeof(Sample1.Sample))
+                sample = new Sample1.Sample(this);
+            else
+                sample.Enabled = true;
         }
 
         /// <summary>
@@ -167,7 +177,22 @@ namespace Samples.SampleExplorer
         /// <param name="args">The object tag</param>
         public void Sample2Pressed(object Tag)
         {
-            sample = new Sample2.Sample(this);
+            if (sample == null || sample.GetType() != typeof(Sample2.Sample))
+                sample = new Sample2.Sample(this);
+            else
+                sample.Enabled = true;
+        }
+
+        /// <summary>
+        /// Invoked when sample 3 is pressed
+        /// </summary>
+        /// <param name="args">The object tag</param>
+        public void Sample3Pressed(object Tag)
+        {
+            if (sample == null || sample.GetType() != typeof(Sample3.Sample))
+                sample = new Sample3.Sample(this);
+            else
+                sample.Enabled = true;
         }
         
         /// <summary>

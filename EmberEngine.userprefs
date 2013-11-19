@@ -1,8 +1,7 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="EmberEngine\Samples\SampleExplorer\SampleExplorer.cs">
     <Files>
-      <File FileName="EmberEngine\EmberEngine\UI\UIClickable.cs" Line="107" Column="1" />
       <File FileName="EmberEngine\Program.cs" Line="1" Column="1" />
       <File FileName="EmberEngine\Samples\SampleExplorer\SampleExplorer.cs" Line="39" Column="11" />
     </Files>

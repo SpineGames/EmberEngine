@@ -16,8 +16,10 @@ namespace EmberEngine
         [STAThread]
         static void Main()
         {
-            using (var game = new Samples.SampleExplorer.SampleExplorer())
+            using (Samples.SampleExplorer.SampleExplorer game = new Samples.SampleExplorer.SampleExplorer())
+            {
                 game.Run();
+            }
         }
     }
     #endif
