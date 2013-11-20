@@ -82,9 +82,6 @@ namespace Samples.Sample1
         /// </summary>
         private void LoadContent()
         {
-            byte[] temp = LoadEffectResource("Content/Common/Shaders/BasicShader.xnb");
-
-            byte _Version = temp[4];
             QuadTexShader terrainShader = new QuadTexShader(Game.Content.Load<Effect>("Common/Shaders/QuadTex"));
             BasicShader effect = new BasicShader(new BasicEffect(GraphicsDevice));
 

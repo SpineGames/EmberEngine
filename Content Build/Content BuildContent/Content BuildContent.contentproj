@@ -48,8 +48,85 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\GUIStyles\template.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Name>template</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Sample1\Terrain\terrain_3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Name>terrain_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Sample3\Textures\menuRoundMask.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Name>menuRoundMask</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Sample3\Textures\parchment.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Name>parchment</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Sample3\Textures\rust.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Name>rust</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Sample2\Textures\Spinner.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Name>Spinner</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Sample2\Textures\grid.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Name>grid</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Sample1\Terrain\terrain_2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Name>terrain_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Sample1\Terrain\terrain_1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Name>terrain_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Sample1\Terrain\terrain_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Name>terrain_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Common\Shaders\Basic.fx">
       <Name>Basic</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>MGEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Common\Shaders\CelShader.fx">
+      <Name>CelShader</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>MGEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Common\Shaders\QuadTex.fx">
+      <Name>QuadTex</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>MGEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Common\Shaders\ReimersTerrain.fx">
+      <Name>ReimersTerrain</Name>
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
@@ -58,8 +135,6 @@
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Common\Shaders\Water.fx">
       <Name>Water</Name>
       <Importer>EffectImporter</Importer>
@@ -67,13 +142,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Shaders\ReimersTerrain.fx">
-      <Name>ReimersTerrain</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>MGEffectProcessor</Processor>
+    <Compile Include="Common\Font\GUIFont1.spritefont">
+      <Name>GUIFont1</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Common\Font\QuartzFont.spritefont">
       <Name>QuartzFont</Name>
       <Importer>FontDescriptionImporter</Importer>
@@ -81,22 +154,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Shaders\QuadTex.fx">
-      <Name>QuadTex</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>MGEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Common\Shaders\CelShader.fx">
-      <Name>CelShader</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>MGEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Common\Font\GUIFont1.spritefont">
-      <Name>GUIFont1</Name>
+    <Compile Include="Common\Font\sf1.spritefont">
+      <Name>sf1</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>

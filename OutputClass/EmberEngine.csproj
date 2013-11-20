@@ -30,62 +30,66 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EmberEngine\ThreeD\CollisionDetection\ICollidable.cs" />
-    <Compile Include="EmberEngine\ThreeD\CollisionDetection\RayCollision.cs" />
-    <Compile Include="EmberEngine\ThreeD\Instancing\Instance.cs" />
-    <Compile Include="EmberEngine\ThreeD\Instancing\IWorldComponent.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\IRenderable.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\PolyRender_MULTITEX.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\PolyRender_VPCNT.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\BasicShader.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\CelShader.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\IShader.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\QuadTexShader.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\ReimersShader.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\VertexMultiTextured.cs" />
-    <Compile Include="EmberEngine\ThreeD\Rendering\VertexPositionColorNormalTexture.cs" />
-    <Compile Include="EmberEngine\ThreeD\Tools\Camera.cs" />
-    <Compile Include="EmberEngine\ThreeD\Tools\FastVertices.cs" />
-    <Compile Include="EmberEngine\ThreeD\Tools\SpritebatchToTexture.cs" />
-    <Compile Include="EmberEngine\ThreeD\Tools\StringRender.cs" />
-    <Compile Include="EmberEngine\ThreeD\ViewParameters.cs" />
-    <Compile Include="EmberEngine\ThreeD\World.cs" />
-    <Compile Include="EmberEngine\Tools\AdvancedMath\Extensions.cs" />
-    <Compile Include="EmberEngine\Tools\AdvancedMath\Math2.cs" />
-    <Compile Include="EmberEngine\Tools\AdvancedMath\Noise\Erode.cs" />
-    <Compile Include="EmberEngine\Tools\AdvancedMath\Noise\FaultFormation.cs" />
-    <Compile Include="EmberEngine\Tools\AdvancedMath\Noise\MidpointDisplacement.cs" />
-    <Compile Include="EmberEngine\Tools\CustomEventHandler.cs" />
-    <Compile Include="EmberEngine\Tools\FramerateCounter.cs" />
-    <Compile Include="EmberEngine\Tools\Input\KeyManager.cs" />
-    <Compile Include="EmberEngine\Tools\Input\KeyWatcher.cs" />
-    <Compile Include="EmberEngine\Tools\Management\BlockTextureManager.cs" />
-    <Compile Include="EmberEngine\Tools\Management\FontManager.cs" />
-    <Compile Include="EmberEngine\UI\UIClickable.cs" />
-    <Compile Include="EmberEngine\UI\UIClickableString.cs" />
-    <Compile Include="EmberEngine\UI\UIElement.cs" />
-    <Compile Include="EmberEngine\UI\UIManager.cs" />
-    <Compile Include="EmberEngine\UI\UISpacer.cs" />
-    <Compile Include="EmberEngine\UI\UIString.cs" />
-    <Compile Include="EmberEngine\Variables\prebuilt.cs" />
-    <Compile Include="EmberEngine\Variables\TrackableVariable.cs" />
+    <Compile Include="ThreeD\CollisionDetection\ICollidable.cs" />
+    <Compile Include="ThreeD\CollisionDetection\RayCollision.cs" />
+    <Compile Include="ThreeD\Instancing\Instance.cs" />
+    <Compile Include="ThreeD\Instancing\IWorldComponent.cs" />
+    <Compile Include="ThreeD\Rendering\PolyRender.cs" />
+    <Compile Include="ThreeD\Rendering\IRenderable.cs" />
+    <Compile Include="ThreeD\Rendering\PolyRender_MULTITEX.cs" />
+    <Compile Include="ThreeD\Rendering\PolyRender_VPCNT.cs" />
+    <Compile Include="ThreeD\Rendering\ShaderWrappers\BasicShader.cs" />
+    <Compile Include="ThreeD\Rendering\ShaderWrappers\CelShader.cs" />
+    <Compile Include="ThreeD\Rendering\ShaderWrappers\IShader.cs" />
+    <Compile Include="ThreeD\Rendering\ShaderWrappers\QuadTexShader.cs" />
+    <Compile Include="ThreeD\Rendering\ShaderWrappers\ReimersShader.cs" />
+    <Compile Include="ThreeD\Rendering\VertexMultiTextured.cs" />
+    <Compile Include="ThreeD\Rendering\VertexPositionColorNormalTexture.cs" />
+    <Compile Include="ThreeD\Tools\Camera.cs" />
+    <Compile Include="ThreeD\Tools\FastVertices.cs" />
+    <Compile Include="ThreeD\Tools\SpritebatchToTexture.cs" />
+    <Compile Include="ThreeD\Tools\StringRender.cs" />
+    <Compile Include="ThreeD\ViewParameters.cs" />
+    <Compile Include="ThreeD\World.cs" />
+    <Compile Include="Tools\AdvancedMath\Extensions.cs" />
+    <Compile Include="Tools\AdvancedMath\Math2.cs" />
+    <Compile Include="Tools\AdvancedMath\Noise\Erode.cs" />
+    <Compile Include="Tools\AdvancedMath\Noise\FaultFormation.cs" />
+    <Compile Include="Tools\AdvancedMath\Noise\MidpointDisplacement.cs" />
+    <Compile Include="Tools\CustomEventHandler.cs" />
+    <Compile Include="Tools\FramerateCounter.cs" />
+    <Compile Include="Tools\Input\KeyManager.cs" />
+    <Compile Include="Tools\Input\KeyWatcher.cs" />
+    <Compile Include="Tools\Management\BlockTextureManager.cs" />
+    <Compile Include="Tools\Management\FontManager.cs" />
+    <Compile Include="UI\UIClickable.cs" />
+    <Compile Include="UI\UIClickableString.cs" />
+    <Compile Include="UI\UIElement.cs" />
+    <Compile Include="UI\UIManager.cs" />
+    <Compile Include="UI\UISpacer.cs" />
+    <Compile Include="UI\UIString.cs" />
+    <Compile Include="Variables\prebuilt.cs" />
+    <Compile Include="Variables\TrackableVariable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="EmberEngine\ThreeD\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\ThreeD\CollisionDetection\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\ThreeD\Instancing\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\ThreeD\Rendering\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\ThreeD\Rendering\ShaderWrappers\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\ThreeD\Tools\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\Tools\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\Tools\AdvancedMath\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\Tools\AdvancedMath\Noise\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\Tools\Input\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\Tools\Management\AAA - Estimated Line Count.txt" />
-    <Content Include="EmberEngine\Totals.txt" />
-    <Content Include="EmberEngine\UI\AAA - Estimated Line Count.txt" />
+    <Content Include="ThreeD\AAA - Estimated Line Count.txt" />
+    <Content Include="ThreeD\CollisionDetection\AAA - Estimated Line Count.txt" />
+    <Content Include="ThreeD\Instancing\AAA - Estimated Line Count.txt" />
+    <Content Include="ThreeD\Rendering\AAA - Estimated Line Count.txt" />
+    <Content Include="ThreeD\Rendering\ShaderWrappers\AAA - Estimated Line Count.txt" />
+    <Content Include="ThreeD\Tools\AAA - Estimated Line Count.txt" />
+    <Content Include="Tools\AAA - Estimated Line Count.txt" />
+    <Content Include="Tools\AdvancedMath\AAA - Estimated Line Count.txt" />
+    <Content Include="Tools\AdvancedMath\Noise\AAA - Estimated Line Count.txt" />
+    <Content Include="Tools\Input\AAA - Estimated Line Count.txt" />
+    <Content Include="Tools\Management\AAA - Estimated Line Count.txt" />
+    <Content Include="Totals.txt" />
+    <Content Include="UI\AAA - Estimated Line Count.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Lidgren.Network, Version=2011.3.12.0, Culture=neutral, processorArchitecture=MSIL">
@@ -109,7 +113,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)\EmberEngine\bin\WindowsGL\Debug\DLL\EmberEngine.dll</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)EmberEngine\DLL\$(TargetName).dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
