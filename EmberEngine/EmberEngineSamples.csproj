@@ -70,6 +70,7 @@
     <Compile Include="Samples\Sample2\Sample2.cs" />
     <Compile Include="Samples\Sample2\Spinner.cs" />
     <Compile Include="Samples\Sample3\Sample3.cs" />
+    <Compile Include="Samples\Sample4\Sample4.cs" />
     <Compile Include="Samples\SampleExplorer\SampleExplorer.cs" />
     <Compile Include="Samples\Sample1\Ball.cs" />
     <Compile Include="Samples\Sample1\Sample1.cs" />
@@ -77,6 +78,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Common\GUIStyles\template.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Common\Textures\carlight.jpg" />
+    <Content Include="Content\Common\Textures\dirt.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Sample1\Terrain\terrain_0.png">
@@ -191,6 +196,23 @@
     <None Include="Content\Common\Font\sf1.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Content\Common\Models\car.xnb" />
+    <Content Include="Content\Common\Models\CHASIS_0.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Common\Models\CHASIS_A_0.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Content\Common\Models\Cubey.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Content\Common\Models\RUEDAS_0.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Common\Models\VENTANAS_0.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Content\Common\Shaders\Shadowed.xnb" />
     <None Include="Content\Sample1\Terrain\terrain_0.xnb" />
     <None Include="Content\Sample1\Terrain\terrain_1.xnb" />
     <None Include="Content\Sample1\Terrain\terrain_2.xnb" />

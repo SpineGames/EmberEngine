@@ -31,28 +31,56 @@ namespace Samples
     /// <summary>
     /// A base saple interface
     /// </summary>
-    public interface ISample
+    public abstract class ISample
     {
         /// <summary>
         /// Checks if this sample is enabled
         /// </summary>
-        bool Enabled
+        public bool Enabled
         {
             get;
             set;
         }
 
         /// <summary>
+        /// Gets the host game for this sample
+        /// </summary>
+        public readonly Game Host;
+
+        /// <summary>
+        /// Creates a new sample
+        /// </summary>
+        /// <param name="Host">The host game</param>
+        public ISample(Game Host)
+        {
+            this.Host = Host;
+            Initialize();
+            LoadContent();
+
+            Enabled = true;
+        }
+
+        /// <summary>
+        /// Initialize this sample
+        /// </summary>
+        protected abstract void Initialize();
+
+        /// <summary>
+        /// Loads all the content for this sample
+        /// </summary>
+        protected abstract void LoadContent();
+
+        /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        void Update(GameTime gameTime);
+        public abstract void Update(GameTime gameTime);
 
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        void Draw(GameTime gameTime);
+        public abstract void Draw(GameTime gameTime);
     }
 }

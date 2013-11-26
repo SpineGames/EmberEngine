@@ -186,6 +186,15 @@ namespace EmberEngine.ThreeD.Rendering
         }
 
         /// <summary>
+        /// Gets the vertices from this poly renderer
+        /// </summary>
+        /// <returns></returns>
+        public T[] GetPolies()
+        {
+            return Buffer.ToArray();
+        }
+
+        /// <summary>
         /// Copies over and clears the temp buffers. This will automagically create
         /// the index buffers
         /// </summary>

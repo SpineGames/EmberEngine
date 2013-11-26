@@ -31,7 +31,7 @@ namespace Samples.Sample2
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Sample : GameComponent, ISample
+    public class Sample : ISample
     {
         SpriteBatch spriteBatch;
         
@@ -56,7 +56,7 @@ namespace Samples.Sample2
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             //GraphicsDevice.RasterizerState.CullMode = CullMode.None;
             keys = new KeyManager();
@@ -69,26 +69,25 @@ namespace Samples.Sample2
             keys.Watchers[2].AddPressed(ResetPressed);
             
             LoadContent();
-            base.Initialize();
         }
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        private void LoadContent()
+        protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(Host.GraphicsDevice);
 
-            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, -10, 2), GraphicsDevice, ThreeDCamera.STATIC);
+            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, -10, 2), Host.GraphicsDevice, ThreeDCamera.STATIC);
             currentCamera.UpVector = new Vector3(0, 0, 1);
             currentCamera.CameraYaw = -90;
 
             world = new World(currentCamera);
 
-            SlotsGame.Intialize(ref world, Game.GraphicsDevice, Game.Content, spriteBatch);
+            SlotsGame.Intialize(ref world, Host.GraphicsDevice, Host.Content, spriteBatch);
 
-            UI = new UIManager(Game.GraphicsDevice, new Vector2(10, 10), 1, Color.Gray, 0.2F);
+            UI = new UIManager(Host.GraphicsDevice, new Vector2(10, 10), 1, Color.Gray, 0.2F);
             UI.AddElement(new UIString(FontManager.Fonts["QuartzFont"], "ga", Color.Green), "Money");
         }
 
@@ -104,8 +103,6 @@ namespace Samples.Sample2
             keys.Update();
 
             UpdateUI();
-
-            base.Update(gameTime);
         }
 
         /// <summary>
@@ -120,13 +117,13 @@ namespace Samples.Sample2
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Blue);
-            
-            GraphicsDevice.BlendState = BlendState.Opaque;
-            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+            Host.GraphicsDevice.Clear(Color.Blue);
+
+            Host.GraphicsDevice.BlendState = BlendState.Opaque;
+            Host.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            Host.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
             world.Render();
 

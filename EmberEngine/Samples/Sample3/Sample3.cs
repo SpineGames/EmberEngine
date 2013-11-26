@@ -22,7 +22,7 @@ namespace Samples.Sample3
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Sample : GameComponent, ISample
+    public class Sample : ISample
     {
         SpriteBatch spriteBatch;
         
@@ -47,7 +47,7 @@ namespace Samples.Sample3
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             //GraphicsDevice.RasterizerState.CullMode = CullMode.None;
             keys = new KeyManager();
@@ -56,20 +56,19 @@ namespace Samples.Sample3
             keys.Watchers[0].AddPressed(EscPressed);
 
             LoadContent();
-            base.Initialize();
         }
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        private void LoadContent()
+        protected  override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(Host.GraphicsDevice);
 
             BaseContainer = new GUIPanel(new Rectangle(0, 0, 240, 240));
-            BaseContainer.Mask = Game.Content.Load<Texture2D>("Sample3/Textures/menuRoundMask");
-            BaseContainer.Texture = Game.Content.Load<Texture2D>("Sample3/Textures/rust");
+            BaseContainer.Mask = Host.Content.Load<Texture2D>("Sample3/Textures/menuRoundMask");
+            BaseContainer.Texture = Host.Content.Load<Texture2D>("Sample3/Textures/rust");
 
             FPSTracker = new TString();
 
@@ -89,7 +88,7 @@ namespace Samples.Sample3
                 "this should be a really long sentance to demonstrate the awesomeness " +
                 "of the GUI text panes. :P See how long this sentence is? it extends " + 
                 "beyond the height of the pane, so a scroll bar is added, isn't that neat?";
-            textPane.Texture = Game.Content.Load<Texture2D>("Sample3/Textures/parchment");
+            textPane.Texture = Host.Content.Load<Texture2D>("Sample3/Textures/parchment");
             
             BaseContainer.AddComponent(fpsElement);
             BaseContainer.AddComponent(GUILabel);
@@ -106,17 +105,15 @@ namespace Samples.Sample3
             keys.Update();
 
             BaseContainer.Update(new GUIUpdateEventArgs(spriteBatch, gameTime));
-
-            base.Update(gameTime);
         }
 
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            Host.GraphicsDevice.Clear(Color.Black);
 
             FramerateCounter.OnDraw(gameTime);
             FPSTracker.Value = "FPS: " + FramerateCounter.FPS;

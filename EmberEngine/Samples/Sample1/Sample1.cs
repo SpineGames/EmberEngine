@@ -30,7 +30,7 @@ namespace Samples.Sample1
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Sample : GameComponent, ISample
+    public class Sample : ISample
     {
         SpriteBatch spriteBatch;
 
@@ -61,7 +61,7 @@ namespace Samples.Sample1
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             //GraphicsDevice.RasterizerState.CullMode = CullMode.None;
             keys = new KeyManager();
@@ -72,29 +72,27 @@ namespace Samples.Sample1
             keys.Watchers[1].AddPressed(EscPressed);
 
             LoadContent();
-
-            base.Initialize();
         }
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        private void LoadContent()
+        protected override void LoadContent()
         {
-            QuadTexShader terrainShader = new QuadTexShader(Game.Content.Load<Effect>("Common/Shaders/QuadTex"));
-            BasicShader effect = new BasicShader(new BasicEffect(GraphicsDevice));
+            QuadTexShader terrainShader = new QuadTexShader(Host.Content.Load<Effect>("Common/Shaders/QuadTex"));
+            BasicShader effect = new BasicShader(new BasicEffect(Host.GraphicsDevice));
 
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(Host.GraphicsDevice);
 
-            tex = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_2");
+            tex = Host.Content.Load<Texture2D>("Sample1/Terrain/terrain_2");
 
-            Texture2D tex0 = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_0");
-            Texture2D tex1 = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_1");
-            Texture2D tex2 = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_2");
-            Texture2D tex3 = Game.Content.Load<Texture2D>("Sample1/Terrain/terrain_3");
+            Texture2D tex0 = Host.Content.Load<Texture2D>("Sample1/Terrain/terrain_0");
+            Texture2D tex1 = Host.Content.Load<Texture2D>("Sample1/Terrain/terrain_1");
+            Texture2D tex2 = Host.Content.Load<Texture2D>("Sample1/Terrain/terrain_2");
+            Texture2D tex3 = Host.Content.Load<Texture2D>("Sample1/Terrain/terrain_3");
 
-            CelShader toon = new CelShader(Game.Content.Load<Effect>("Common/Shaders/CelShader"));
+            CelShader toon = new CelShader(Host.Content.Load<Effect>("Common/Shaders/CelShader"));
 
             toon.Texture = tex0;
             toon.DiffuseColor = Color.White;
@@ -123,20 +121,20 @@ namespace Samples.Sample1
             ((BasicEffect)effect.BaseEffect).DirectionalLight0.DiffuseColor = Color.LightGray.ToVector3();
             ((BasicEffect)effect.BaseEffect).DirectionalLight0.Direction = new Vector3(0, 0, -1);
             ((BasicEffect)effect.BaseEffect).DirectionalLight0.Enabled = true;
-            
-            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, 0, 5), GraphicsDevice, ThreeDCamera.PLAYER_WASD_MOUSE);
+
+            ThreeDCamera currentCamera = new ThreeDCamera(new Vector3(0, 0, 5), Host.GraphicsDevice, ThreeDCamera.PLAYER_WASD_MOUSE);
             currentCamera.UpVector = new Vector3(0, 0, 1);            
             currentCamera.MouseLook = true;
 
             world = new World(currentCamera);
 
-            UI = new UIManager(GraphicsDevice, new Vector2(5, 5), 0, Color.Gray, 0.1F);
+            UI = new UIManager(Host.GraphicsDevice, new Vector2(5, 5), 0, Color.Gray, 0.1F);
 
             UI.AddElement(new UIString("sf1", currentCamera.ToString(), Color.Black), "camera");
             UI.AddElement(new UIString("sf1", "FPS: ", Color.Black), "fps");
             UI.AddElement(new UIString("sf1", "Mouse Pos: ", Color.Black), "mouse");
 
-            terrain = new ThreeDTerrain(GraphicsDevice, new Point(256, 256), 4F, new Random().Next());
+            terrain = new ThreeDTerrain(Host.GraphicsDevice, new Point(256, 256), 4F, new Random().Next());
             terrain.Initialize(world);
             terrainHeight = terrain.GetHeightmapTex();
 
@@ -154,18 +152,16 @@ namespace Samples.Sample1
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        new public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             world.Update(gameTime);
 
-            if (!Game.IsActive)
+            if (!Host.IsActive)
                 world.MainCamera.MouseLook = false;
 
             keys.Update();
 
             UpdateUI();
-
-            base.Update(gameTime);
         }
 
         /// <summary>
@@ -182,21 +178,21 @@ namespace Samples.Sample1
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            
-            GraphicsDevice.BlendState = BlendState.Opaque;
-            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+            Host.GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            Host.GraphicsDevice.BlendState = BlendState.Opaque;
+            Host.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            Host.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
             world.Render();
             
             spriteBatch.Begin();
             spriteBatch.Draw(terrainHeight,
                 new Rectangle(
-                    GraphicsDevice.Viewport.Width - 120,
-                    GraphicsDevice.Viewport.Height - 120,
+                    Host.GraphicsDevice.Viewport.Width - 120,
+                    Host.GraphicsDevice.Viewport.Height - 120,
                     120, 120), Color.White);
 
             UI.Render(spriteBatch);

@@ -88,10 +88,12 @@ namespace Samples.SampleExplorer
             UI.AddElement(new UISClickableString("sf1", "< Terrain Demo >", Color.Black), "Sample1");
             UI.AddElement(new UISClickableString("sf1", "<  Slots Game  >", Color.Black), "Sample2");
             UI.AddElement(new UISClickableString("sf1", "<   GUI Demo   >", Color.Black), "Sample3");
+            UI.AddElement(new UISClickableString("sf1", "< Shadow Test  >", Color.Black), "Sample4");
 
             ((UIClickable)UI.GetElement("Sample1")).OnClick += Sample1Pressed;
             ((UIClickable)UI.GetElement("Sample2")).OnClick += Sample2Pressed;
             ((UIClickable)UI.GetElement("Sample3")).OnClick += Sample3Pressed;
+            ((UIClickable)UI.GetElement("Sample4")).OnClick += Sample4Pressed;
         }
 
         /// <summary>
@@ -191,6 +193,18 @@ namespace Samples.SampleExplorer
         {
             if (sample == null || sample.GetType() != typeof(Sample3.Sample))
                 sample = new Sample3.Sample(this);
+            else
+                sample.Enabled = true;
+        }
+
+        /// <summary>
+        /// Invoked when sample 4 is pressed
+        /// </summary>
+        /// <param name="args">The object tag</param>
+        public void Sample4Pressed(object Tag)
+        {
+            if (sample == null || sample.GetType() != typeof(Sample4.Sample))
+                sample = new Sample4.Sample(this);
             else
                 sample.Enabled = true;
         }
