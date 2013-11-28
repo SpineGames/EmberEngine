@@ -49,8 +49,6 @@ namespace Samples.SampleExplorer
             Content.RootDirectory = "Content";
 
             Window.Title = "Slots Demo";
-
-            PolyRender_VPNTC.Initialize(CullMode.CullCounterClockwiseFace);
         }
 
         /// <summary>
@@ -89,11 +87,13 @@ namespace Samples.SampleExplorer
             UI.AddElement(new UISClickableString("sf1", "<  Slots Game  >", Color.Black), "Sample2");
             UI.AddElement(new UISClickableString("sf1", "<   GUI Demo   >", Color.Black), "Sample3");
             UI.AddElement(new UISClickableString("sf1", "< Shadow Test  >", Color.Black), "Sample4");
+            UI.AddElement(new UISClickableString("sf1", "<   2D Tests   >", Color.Black), "Sample5");
 
             ((UIClickable)UI.GetElement("Sample1")).OnClick += Sample1Pressed;
             ((UIClickable)UI.GetElement("Sample2")).OnClick += Sample2Pressed;
             ((UIClickable)UI.GetElement("Sample3")).OnClick += Sample3Pressed;
             ((UIClickable)UI.GetElement("Sample4")).OnClick += Sample4Pressed;
+            ((UIClickable)UI.GetElement("Sample5")).OnClick += Sample5Pressed;
         }
 
         /// <summary>
@@ -205,6 +205,18 @@ namespace Samples.SampleExplorer
         {
             if (sample == null || sample.GetType() != typeof(Sample4.Sample))
                 sample = new Sample4.Sample(this);
+            else
+                sample.Enabled = true;
+        }
+
+        /// <summary>
+        /// Invoked when sample 5 is pressed
+        /// </summary>
+        /// <param name="args">The object tag</param>
+        public void Sample5Pressed(object Tag)
+        {
+            if (sample == null || sample.GetType() != typeof(Sample5.Sample))
+                sample = new Sample5.Sample(this);
             else
                 sample.Enabled = true;
         }

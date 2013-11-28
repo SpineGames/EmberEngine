@@ -37,8 +37,6 @@ namespace Samples.Sample3
             Initialize();
             game.Window.Title = "GUI Demo";
             Enabled = true;
-
-            PolyRender_VPNTC.Initialize(CullMode.CullCounterClockwiseFace);
         }
 
         /// <summary>

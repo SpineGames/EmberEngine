@@ -50,16 +50,6 @@ namespace EmberEngine.ThreeD
         }
 
         /// <summary>
-        /// Adds a refrence to a component to this world
-        /// </summary>
-        /// <param name="instance">The reference of the component to add</param>
-        /// <returns>The instance ID for the object</returns>
-        public int AddInstance(ref Instance instance)
-        {
-            return AppendInstanceToArray(instance);
-        }
-
-        /// <summary>
         /// Gets the instance from the given ID
         /// </summary>
         /// <param name="ID">The ID to search for</param>
@@ -129,7 +119,8 @@ namespace EmberEngine.ThreeD
 
             foreach (Instance c in instances)
             {
-                c.Update(gameTime);
+                if (c!= null)
+                    c.Update(gameTime);
             }
         }
 

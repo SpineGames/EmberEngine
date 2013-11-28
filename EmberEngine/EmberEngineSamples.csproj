@@ -51,6 +51,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GUI\GUITabPanel.cs" />
     <Compile Include="GUI\GUI.cs" />
     <Compile Include="GUI\GUIComponent.cs" />
     <Compile Include="GUI\GUIContainer.cs" />
@@ -71,10 +72,20 @@
     <Compile Include="Samples\Sample2\Spinner.cs" />
     <Compile Include="Samples\Sample3\Sample3.cs" />
     <Compile Include="Samples\Sample4\Sample4.cs" />
+    <Compile Include="Samples\Sample5\BasicInstance.cs" />
+    <Compile Include="Samples\Sample5\BasicCar.cs" />
+    <Compile Include="Samples\Sample5\Sample5.cs" />
     <Compile Include="Samples\SampleExplorer\SampleExplorer.cs" />
     <Compile Include="Samples\Sample1\Ball.cs" />
     <Compile Include="Samples\Sample1\Sample1.cs" />
     <Compile Include="Samples\Sample1\ThreeDTerrain.cs" />
+    <Compile Include="TwoD\Instances\Instance2D.cs" />
+    <Compile Include="TwoD\Rendering\Rendering.cs" />
+    <Compile Include="TwoD\Rendering\TileMap.cs" />
+    <Compile Include="TwoD\Rendering\TileRenderer.cs" />
+    <Compile Include="TwoD\Sprite.cs" />
+    <Compile Include="TwoD\Tools\EventHandlers.cs" />
+    <Compile Include="TwoD\World.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Common\GUIStyles\template.png">
@@ -109,6 +120,27 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Sample3\Textures\rust.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sample5\Sprites\car_blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sample5\Sprites\car_convertable.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sample5\Sprites\car_ragTop.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sample5\Sprites\car_red.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sample5\Sprites\car_van.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sample5\testSprite.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sample5\tileSheet.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="DLL\EmberEngine.dll">
@@ -164,7 +196,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Content\Common\Models\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Common\Font\GUIFont1.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -196,22 +230,6 @@
     <None Include="Content\Common\Font\sf1.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Content\Common\Models\car.xnb" />
-    <Content Include="Content\Common\Models\CHASIS_0.xnb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Common\Models\CHASIS_A_0.xnb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="Content\Common\Models\Cubey.xnb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Content Include="Content\Common\Models\RUEDAS_0.xnb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Common\Models\VENTANAS_0.xnb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Content\Common\Shaders\Shadowed.xnb" />
     <None Include="Content\Sample1\Terrain\terrain_0.xnb" />
     <None Include="Content\Sample1\Terrain\terrain_1.xnb" />
@@ -222,6 +240,9 @@
     <None Include="Content\Sample3\Textures\menuRoundMask.xnb" />
     <None Include="Content\Sample3\Textures\parchment.xnb" />
     <None Include="Content\Sample3\Textures\rust.xnb" />
+    <Content Include="Content\Sample5\Plaza.tlmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

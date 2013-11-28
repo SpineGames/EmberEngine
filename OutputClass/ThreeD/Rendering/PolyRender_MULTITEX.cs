@@ -21,12 +21,16 @@ namespace EmberEngine.ThreeD.Rendering
         /// Creates a new multitextured polygon renderer
         /// </summary>
         /// <param name="Graphics">The graphics device to use</param>
-        public PolyRender_MULTITEX(GraphicsDevice Graphics) : base(Graphics) { }
+        /// <param name="cullMode">The culling to use. Default CullCounterClockwiseFace</param>
+        public PolyRender_MULTITEX(GraphicsDevice Graphics, CullMode cullMode = CullMode.CullCounterClockwiseFace) 
+            : base(Graphics, cullMode) { }
         
         /// <summary>
         /// Creates a new multitextured polygon renderer
         /// </summary>
         /// <param name="Shader">The shader to use</param>
-        public PolyRender_MULTITEX(Shader Shader) : base(Shader) { } 
+        /// <param name="cullMode">The culling to use. Default CullCounterClockwiseFace</param>
+        public PolyRender_MULTITEX(Shader Shader, CullMode cullMode = CullMode.CullCounterClockwiseFace) : 
+            base(Shader, cullMode) { } 
     }
 }

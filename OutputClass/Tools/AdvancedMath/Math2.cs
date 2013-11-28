@@ -13,6 +13,9 @@ namespace EmberEngine.Tools.AdvancedMath
     {
         const double toRad = Math.PI / 180.00;
         const double toDeg = 180.00 * Math.PI;
+
+        const float toRadF = (float)(Math.PI / 180.00);
+        const float toDegF = (float)(180.00 * Math.PI);
         
         /// <summary>
         /// Gets this degree as radians
@@ -33,19 +36,93 @@ namespace EmberEngine.Tools.AdvancedMath
         }
 
         /// <summary>
+        /// Gets this degree as radians
+        /// </summary>
+        /// <returns>this double in radians</returns>
+        public static float ToRad(this float degrees)
+        {
+            return degrees * toRadF;
+        }
+
+        /// <summary>
+        /// Gets this radian as a degree
+        /// </summary>
+        /// <returns>degrees in this radian</returns>
+        public static float ToDeg(this float radians)
+        {
+            return radians * toDegF;
+        }
+
+        /// <summary>
         /// Wraps the given value between a min and a max
         /// </summary>
         /// <param name="min">The minimum value to wrap to</param>
         /// <param name="max">The maximum value to wrap to</param>
         /// <param name="val">The value to wrap</param>
         /// <returns><i>val</i> wrapped between <i>max</i> and <i>min</i></returns>
-        public static double Wrap(double min, double max, double val)
+        public static double Wrap(this double val, double min, double max)
         {
-            double range = max - min;
+            double Min = Math.Min(min, max);
+            double Max = Math.Max(min, max);
 
-            while (val < min)
+            double range = Max - Min;
+
+            if (range == 0)
+                return min;
+
+            while (val < Min)
                 val += range;
-            while (val > max)
+            while (val > Max)
+                val -= range;
+
+            return val;
+        }
+
+        /// <summary>
+        /// Wraps the given value between a min and a max
+        /// </summary>
+        /// <param name="min">The minimum value to wrap to</param>
+        /// <param name="max">The maximum value to wrap to</param>
+        /// <param name="val">The value to wrap</param>
+        /// <returns><i>val</i> wrapped between <i>max</i> and <i>min</i></returns>
+        public static float Wrap(this float val, float min, float max)
+        {
+            float Min = Math.Min(min, max);
+            float Max = Math.Max(min, max);
+
+            float range = Max - Min;
+
+            if (range == 0)
+                return min;
+
+            while (val < Min)
+                val += range;
+            while (val > Max)
+                val -= range;
+
+            return val;
+        }
+
+        /// <summary>
+        /// Wraps the given value between a min and a max
+        /// </summary>
+        /// <param name="min">The minimum value to wrap to</param>
+        /// <param name="max">The maximum value to wrap to</param>
+        /// <param name="val">The value to wrap</param>
+        /// <returns><i>val</i> wrapped between <i>max</i> and <i>min</i></returns>
+        public static int Wrap(this int val, int min, int max)
+        {
+            int Min = Math.Min(min, max);
+            int Max = Math.Max(min, max);
+
+            int range = Max - Min;
+
+            if (range == 0)
+                return min;
+
+            while (val < Min)
+                val += range;
+            while (val > Max)
                 val -= range;
 
             return val;
@@ -82,6 +159,17 @@ namespace EmberEngine.Tools.AdvancedMath
         public static double LengthdirZ(double angle, double length)
         {
             return length * Math.Sin(angle);
+        }
+
+        /// <summary>
+        /// Gets the change in x and y for the given angle and length
+        /// </summary>
+        /// <param name="angle">The angle in <b>degrees</b></param>
+        /// <param name="length">The length of the terminal arm</param>
+        /// <returns>A vector2 representing the change in x over the change in y</returns>
+        public static Vector2 Lengthdir(double angle, double length)
+        {
+            return new Vector2((float)LengthdirX(angle, length), (float)LengthdirY(angle, length));
         }
 
         /// <summary>

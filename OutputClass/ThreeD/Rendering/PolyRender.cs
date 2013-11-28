@@ -9,6 +9,7 @@ using EmberEngine.ThreeD;
 using EmberEngine.ThreeD.Rendering;
 using EmberEngine.ThreeD.Rendering.ShaderWrappers;
 using EmberEngine.EmberEngine.ThreeD.Rendering;
+using System.Reflection;
 
 namespace EmberEngine.ThreeD.Rendering
 {
@@ -21,10 +22,12 @@ namespace EmberEngine.ThreeD.Rendering
         /// The buffer for all vertices
         /// </summary>
         T[] Buffer = new T[] { };
+        VertexBuffer VBuffer;
         /// <summary>
         /// The indeces used to speed up rendering
         /// </summary>
         int[] Indices;
+        IndexBuffer IBuffer;
 
         /// <summary>
         /// The number of primitives (triangles or lines)
@@ -112,7 +115,7 @@ namespace EmberEngine.ThreeD.Rendering
         /// <summary>
         /// Gets a wireframe rasterizer
         /// </summary>
-        public static RasterizerState Wireframe
+        public RasterizerState Wireframe
         {
             get
             {
@@ -124,7 +127,7 @@ namespace EmberEngine.ThreeD.Rendering
         /// <summary>
         /// Gets a solid rasterizer
         /// </summary>
-        public static RasterizerState Solid
+        public RasterizerState Solid
         {
             get
             {
@@ -133,10 +136,19 @@ namespace EmberEngine.ThreeD.Rendering
         }
 
         /// <summary>
+        /// The field info for the vertex declaration
+        /// </summary>
+        private static readonly PropertyInfo field = typeof(T).GetProperty("VertexDeclaration");
+        /// <summary>
+        /// Represents the vertex declaration for this renderer
+        /// </summary>
+        VertexDeclaration vertexDeclaration;
+
+        /// <summary>
         /// Initializes the Poly renderer's static parameters
         /// </summary>
         /// <param name="cullMode">The culling to usee in this game</param>
-        public static void Initialize(CullMode cullMode)
+        public void Initialize(CullMode cullMode)
         {
             wireframe = new RasterizerState();
             wireframe.FillMode = FillMode.WireFrame;
@@ -145,25 +157,31 @@ namespace EmberEngine.ThreeD.Rendering
             solid = new RasterizerState();
             solid.FillMode = FillMode.Solid;
             solid.CullMode = cullMode;
+
+            vertexDeclaration = (VertexDeclaration)field.GetValue(new T(), null);
         }
 
         /// <summary>
         /// Creates a new poly renderer
         /// </summary>
         /// <param name="graphics">The GraphicsDevice to use</param>
-        public PolyRender(GraphicsDevice graphics)
+        public PolyRender(GraphicsDevice graphics, CullMode cullMode)
         {
             this.Graphics = graphics;
+
+            Initialize(cullMode);
         }
 
         /// <summary>
         /// Creates a new poly renderer
         /// </summary>
         /// <param name="World">The world transformation to use</param>
-        public PolyRender(Shader shader)
+        public PolyRender(Shader shader, CullMode cullMode)
         {
             this.Effect = shader.Clone();
             this.Graphics = shader.BaseEffect.GraphicsDevice;
+
+            Initialize(cullMode);
         }
 
         /// <summary>
@@ -202,7 +220,24 @@ namespace EmberEngine.ThreeD.Rendering
         {
             Buffer = Temp.ToArray();
             Temp.Clear();
-            PrimitiveCount = Buffer.Length / 3;
+            switch (RenderType)
+            {
+                case PrimitiveType.TriangleList:
+                    PrimitiveCount = Buffer.Length / 3;
+                    break;
+
+                case PrimitiveType.LineList:
+                    PrimitiveCount = Buffer.Length / 2;
+                    break;
+
+                case PrimitiveType.LineStrip:
+                    PrimitiveCount = Buffer.Length - 1;
+                    break;
+
+                case PrimitiveType.TriangleStrip:
+                    PrimitiveCount = Buffer.Length - 2;
+                    break;
+            }
             VertCount = Buffer.Length;
 
             Indices = new int[Buffer.Length];
@@ -211,6 +246,12 @@ namespace EmberEngine.ThreeD.Rendering
             {
                 Indices[i] = i;
             }
+
+            VBuffer = new VertexBuffer(Graphics, vertexDeclaration, VertCount, BufferUsage.WriteOnly);
+            VBuffer.SetData<T>(Buffer);
+
+            IBuffer = new IndexBuffer(Graphics, IndexElementSize.ThirtyTwoBits, Indices.Length, BufferUsage.WriteOnly);
+            IBuffer.SetData<int>(Indices);
         }
 
         /// <summary>
@@ -222,10 +263,33 @@ namespace EmberEngine.ThreeD.Rendering
         {
             Buffer = Temp.ToArray();
             Temp.Clear();
-            PrimitiveCount = indexBuffer.Length / 3;
+            switch (RenderType)
+            {
+                case PrimitiveType.TriangleList:
+                    PrimitiveCount = Buffer.Length / 3;
+                    break;
+
+                case PrimitiveType.LineList:
+                    PrimitiveCount = Buffer.Length / 2;
+                    break;
+
+                case PrimitiveType.LineStrip:
+                    PrimitiveCount = Buffer.Length - 1;
+                    break;
+
+                case PrimitiveType.TriangleStrip:
+                    PrimitiveCount = Buffer.Length - 2;
+                    break;
+            }
             VertCount = Buffer.Length;
 
             Indices = indexBuffer;
+            
+            VBuffer = new VertexBuffer(Graphics, vertexDeclaration, VertCount, BufferUsage.WriteOnly);
+            VBuffer.SetData<T>(Buffer);
+
+            IBuffer = new IndexBuffer(Graphics, IndexElementSize.ThirtyTwoBits, Indices.Length, BufferUsage.WriteOnly);
+            IBuffer.SetData<int>(Indices);
         }
 
         /// <summary>
@@ -236,14 +300,24 @@ namespace EmberEngine.ThreeD.Rendering
         {
             if (PrimitiveCount > 0)
             {
+                if (WireFrame)
+                    Graphics.RasterizerState = wireframe;
+                else
+                    Graphics.RasterizerState = solid;
+
                 view.ApplyToEffect(Effect, world);
 
                 foreach (EffectPass p in Effect.BaseEffect.CurrentTechnique.Passes)
                 {
                     p.Apply();
 
-                    Graphics.DrawUserIndexedPrimitives<T>(
-                        RenderType, Buffer, 0, VertCount, Indices, 0, PrimitiveCount);
+                    Graphics.SetVertexBuffer(VBuffer);
+                    Graphics.Indices = IBuffer;
+
+                    //Graphics.DrawPrimitives(RenderType, 0,  PrimitiveCount);
+
+                    Graphics.DrawUserIndexedPrimitives<T>(RenderType, Buffer, 0, VertCount,
+                        Indices, 0, PrimitiveCount);
                 }
             }
         }

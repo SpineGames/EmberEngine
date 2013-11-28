@@ -43,11 +43,8 @@ namespace Samples.Sample2
         public Sample(Game game)
             : base(game)
         {
-            Initialize();
             game.Window.Title = "Slots Demo";
             Enabled = true;
-
-            PolyRender_VPNTC.Initialize(CullMode.CullCounterClockwiseFace);
         }
 
         /// <summary>
@@ -67,8 +64,6 @@ namespace Samples.Sample2
             keys.Watchers[1].AddPressed(EscPressed);
             keys.AddKeyWatcher(new KeyWatcher(Key.R));
             keys.Watchers[2].AddPressed(ResetPressed);
-            
-            LoadContent();
         }
 
         /// <summary>

@@ -47,12 +47,7 @@ namespace Samples.Sample1
         public Sample(Game game)
             : base(game)
         {
-            Initialize();
-
             game.Window.Title = "Ember Engine Test";
-            Enabled = true;
-
-            PolyRender_VPNTC.Initialize(CullMode.CullCounterClockwiseFace);
         }
 
         /// <summary>
@@ -68,10 +63,8 @@ namespace Samples.Sample1
 
             keys.AddKeyWatcher(new KeyWatcher(Key.Q));
             keys.Watchers[0].AddPressed(QPressed);
-            keys.AddKeyWatcher(new KeyWatcher(Key.Escape));
+            keys.AddKeyWatcher(new KeyWatcher(Key.Tilde));
             keys.Watchers[1].AddPressed(EscPressed);
-
-            LoadContent();
         }
 
         /// <summary>
@@ -141,7 +134,7 @@ namespace Samples.Sample1
             Ball b = new Ball(4, 16, new Vector3(0, 0, 0), effect, 8);
             b.UpdateEvent += UpdateBall;
             ((PolyRender_VPNTC)b.Renderer).Texture = tex2;
-            ((PolyRender_VPNTC)b.Renderer).WireFrame = true;
+            ((PolyRender_VPNTC)b.Renderer).WireFrame = false;
             b.Initialize(world);
 
             ((PolyRender_MULTITEX)terrain.Renderer).Effect = terrainShader;
@@ -158,6 +151,8 @@ namespace Samples.Sample1
 
             if (!Host.IsActive)
                 world.MainCamera.MouseLook = false;
+
+            world.MainCamera.Update(gameTime);
 
             keys.Update();
 

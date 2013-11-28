@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace EmberEngine.Tools.AdvancedMath
 {
+    /// <summary>
+    /// Holds some extension methods for math purposes
+    /// </summary>
     public static class Extensions
     {
         /// <summary>
@@ -19,22 +22,6 @@ namespace EmberEngine.Tools.AdvancedMath
         public static bool IsGreater(this Vector2 v1, Vector2 v2)
         {
             return (v1.X > v2.X || v1.Y > v2.Y);
-        }
-
-        /// <summary>
-        /// Wraps this float around a min and a max
-        /// </summary>
-        /// <param name="val">The value to wrap</param>
-        /// <param name="min">The min value to wrap by</param>
-        /// <param name="max">The max value to wrap by</param>
-        /// <returns>val wrapped to min -> max</returns>
-        public static float Wrap(this float val, float min, float max)
-        {
-            while (val < min)
-                val += max - min;
-            while (val > max)
-                val -= max - min;
-            return val;
         }
 
         #region Array

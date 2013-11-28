@@ -115,7 +115,7 @@ namespace Sample4
         
         public override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (Keyboard.GetState().IsKeyDown(Keys.OemTilde))
                 this.Enabled = false;
 
             UpdateLightData();
