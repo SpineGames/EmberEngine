@@ -103,12 +103,8 @@ namespace EmberEngine.ThreeD.Rendering
         /// </summary>
         public bool WireFrame
         {
-            get { return wireFrame; }
-            set
-            {
-                wireFrame = value;
-                Graphics.RasterizerState = value ? wireframe : solid;
-            }
+            get;
+            set;
         }
 
         static RasterizerState wireframe;
@@ -219,26 +215,8 @@ namespace EmberEngine.ThreeD.Rendering
         public void FinalizePolys()
         {
             Buffer = Temp.ToArray();
-            Temp.Clear();
-            switch (RenderType)
-            {
-                case PrimitiveType.TriangleList:
-                    PrimitiveCount = Buffer.Length / 3;
-                    break;
-
-                case PrimitiveType.LineList:
-                    PrimitiveCount = Buffer.Length / 2;
-                    break;
-
-                case PrimitiveType.LineStrip:
-                    PrimitiveCount = Buffer.Length - 1;
-                    break;
-
-                case PrimitiveType.TriangleStrip:
-                    PrimitiveCount = Buffer.Length - 2;
-                    break;
-            }
             VertCount = Buffer.Length;
+            Temp.Clear();
 
             Indices = new int[Buffer.Length];
 
@@ -246,6 +224,8 @@ namespace EmberEngine.ThreeD.Rendering
             {
                 Indices[i] = i;
             }
+
+            SetPolyCount();
 
             VBuffer = new VertexBuffer(Graphics, vertexDeclaration, VertCount, BufferUsage.WriteOnly);
             VBuffer.SetData<T>(Buffer);
@@ -262,34 +242,43 @@ namespace EmberEngine.ThreeD.Rendering
         public void FinalizePolys(int[] indexBuffer)
         {
             Buffer = Temp.ToArray();
-            Temp.Clear();
-            switch (RenderType)
-            {
-                case PrimitiveType.TriangleList:
-                    PrimitiveCount = Buffer.Length / 3;
-                    break;
-
-                case PrimitiveType.LineList:
-                    PrimitiveCount = Buffer.Length / 2;
-                    break;
-
-                case PrimitiveType.LineStrip:
-                    PrimitiveCount = Buffer.Length - 1;
-                    break;
-
-                case PrimitiveType.TriangleStrip:
-                    PrimitiveCount = Buffer.Length - 2;
-                    break;
-            }
             VertCount = Buffer.Length;
+            Temp.Clear();
 
             Indices = indexBuffer;
+
+            SetPolyCount();
             
             VBuffer = new VertexBuffer(Graphics, vertexDeclaration, VertCount, BufferUsage.WriteOnly);
             VBuffer.SetData<T>(Buffer);
 
             IBuffer = new IndexBuffer(Graphics, IndexElementSize.ThirtyTwoBits, Indices.Length, BufferUsage.WriteOnly);
             IBuffer.SetData<int>(Indices);
+        }
+
+        /// <summary>
+        /// Sets the correct poly count
+        /// </summary>
+        private void SetPolyCount()
+        {
+            switch (RenderType)
+            {
+                case PrimitiveType.TriangleList:
+                    PrimitiveCount = Indices.Length / 3;
+                    break;
+
+                case PrimitiveType.LineList:
+                    PrimitiveCount = Indices.Length / 2;
+                    break;
+
+                case PrimitiveType.LineStrip:
+                    PrimitiveCount = Indices.Length - 1;
+                    break;
+
+                case PrimitiveType.TriangleStrip:
+                    PrimitiveCount = Indices.Length - 2;
+                    break;
+            }
         }
 
         /// <summary>

@@ -65,6 +65,8 @@ namespace Samples.Sample1
             keys.Watchers[0].AddPressed(QPressed);
             keys.AddKeyWatcher(new KeyWatcher(Key.Tilde));
             keys.Watchers[1].AddPressed(EscPressed);
+            keys.AddKeyWatcher(new KeyWatcher(Key.T));
+            keys.Watchers[2].AddPressed(DebugPressed);
         }
 
         /// <summary>
@@ -131,7 +133,7 @@ namespace Samples.Sample1
             terrain.Initialize(world);
             terrainHeight = terrain.GetHeightmapTex();
 
-            Ball b = new Ball(4, 16, new Vector3(0, 0, 0), effect, 8);
+            Ball b = new Ball(4, 12, new Vector3(0, 0, 0), effect, 8);
             b.UpdateEvent += UpdateBall;
             ((PolyRender_VPNTC)b.Renderer).Texture = tex2;
             ((PolyRender_VPNTC)b.Renderer).WireFrame = false;
@@ -205,13 +207,19 @@ namespace Samples.Sample1
         {
             Ball ball = (Ball)args.Instance;
             
-            ball.Position = terrain.TranslateVector(world.MainCamera.CameraPos);
-            ball.Rotation = Math2.GetPitchRollYaw(world.MainCamera.CameraNormal);
+            //ball.Position = terrain.TranslateVector(world.MainCamera.CameraPos);
+            //ball.Rotation = Math2.GetPitchRollYaw(world.MainCamera.CameraNormal);
         }
 
         public void QPressed(KeyDownEventArgs args)
         {
             world.MainCamera.MouseLook = !world.MainCamera.MouseLook;
+        }
+
+        public void DebugPressed(KeyDownEventArgs args)
+        {
+            ((PolyRender_VPNTC)world.GetInstance(1).Renderer).WireFrame =
+                !((PolyRender_VPNTC)world.GetInstance(1).Renderer).WireFrame;
         }
 
         public void EscPressed(KeyDownEventArgs args)
